@@ -1,4 +1,6 @@
 <?php
+//MarkerCluster-Plugin
+// https://github.com/Leaflet/Leaflet.markercluster#using-the-plugin
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,18 +49,20 @@
     // accessToken: 'pk.eyJ1IjoibWFwcGVuaGVpbWVyIiwiYSI6ImNrMDJxaGltYzFoeWszYnBkbzd4amgxOGMifQ.jm6QRmXrLzHJBPBJ4SOWXA'
     // }).addTo(mymap);
 
-    var littleton = L.marker([47.312759, 12.420044]).bindPopup('This is Littleton, CO.'),
-    denver    = L.marker([48.239309, 15.441284]).bindPopup('This is Denver, CO.'),
-    aurora    = L.marker([48.629278, 12.090454]).bindPopup('This is Aurora, CO.'),
-    golden    = L.marker([48.432845, 10.283203]).bindPopup('This is Golden, CO.');
+    // var littleton = L.marker([47.312759, 12.420044]).bindPopup('This is Littleton, CO.'),
+    // denver    = L.marker([48.239309, 15.441284]).bindPopup('This is Denver, CO.'),
+    // aurora    = L.marker([48.629278, 12.090454]).bindPopup('This is Aurora, CO.'),
+    // golden    = L.marker([48.432845, 10.283203]).bindPopup('This is Golden, CO.');
 
-    var cities = L.layerGroup([littleton, denver, aurora, golden]);
+    // var cities = L.layerGroup([littleton, denver, aurora, golden]);
 
-    var markers = L.markerClusterGroup();
-    
-    markers.addLayer(L.marker(getRandomLatLng(map)));
-    
-    map.addLayer(markers);
+    var places = [
+            [ 47.312759, 12.420044, "Somewhere in A (001)" ],
+            [ 48.629278, 12.090454, "Somewhere in A (002)" ],
+            [ 48.432845, 10.283203, "Somewhere in A (003)" ],
+            [ 48.239309, 15.441284, "Somewhere in A (004)" ] 
+    ];
+
 
 	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 	    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -72,7 +76,6 @@
                                     tileSize: 512, 
                                     zoomOffset: -1, 
                                     attribution: mbAttr,
-                                    minZoom: 8
                                 }
                                 );
 
@@ -81,15 +84,38 @@
                                     tileSize: 512, 
                                     zoomOffset: -1, 
                                     attribution: mbAttr,
-                                    minZoom: 8
                                 }
                                 );
 
     var mymap = L.map('mapid', {
         center: [47.661688,13.090210],
         zoom: 8,
-        layers: [grayscale, cities]
+        layers: [grayscale]
     });
+
+    //Loop through the markers array
+    //Alle Punkte aus dem Places-Array der Map bzw. MarkerGroup und dann der Map hinzufügen...
+    
+    markerGroup = L.layerGroup();
+    
+    for (var i=0; i<places.length; i++) {
+        
+        var lon = places[i][0];
+        var lat = places[i][1];
+        var popupText = places[i][2];
+        
+        var markerLocation = new L.LatLng(lon, lat);
+        var marker = new L.Marker(markerLocation);
+        
+        // mymap.addLayer(marker);
+
+        // marker.bindPopup(popupText);
+
+        markerGroup.addLayer(marker);
+
+    }
+
+    mymap.addLayer(markerGroup);
 
     var baseMaps = {
         "Grayscale": grayscale,
@@ -97,15 +123,22 @@
     };  
 
     var overlayMaps = {
-        "Cities": cities
+        "MarkerGroup": markerGroup
     };
 
     L.control.layers(baseMaps, overlayMaps).addTo(mymap);
 
     var baseMaps = {
     "<span style='color: gray'>Grayscale</span>": grayscale,
-    "Streets": streets
+    "Streets": streets,
+    "MarkerGroup": markerGroup
     };
+
+
+    //usage MarkerClusters...
+    // var markers = L.markerClusterGroup();
+    // markers.addLayer(L.marker(getRandomLatLng(map)));
+    // map.addLayer(markers);
 
     mymap.on('click', function(e) {
         //alert(e.latlng);
