@@ -26,6 +26,34 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <style>
+        .circle {
+            width: 52px;
+            height: 52px;
+            line-height: 55px;
+            background-image: url('circle6.gif');
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .mask {
+            position: absolute;
+            top: -50px;                     /* minus half the div size */
+            left: -50px;                    /* minus half the div size */
+            width: 100px;                   /* the div size */
+            height: 100px;                  /* the div size */
+            background-color: transparent;
+            border-radius: 100px;           /* the div size */
+            border: 50px solid black;       /* half the div size */
+            pointer-events: none;           /* send mouse events beneath this layer */
+        }
+	</style>
+    
+    
     <title>vcoemap</title>
 
 
@@ -60,7 +88,16 @@
             [ 47.312759, 12.420044, "Somewhere in A (001)" ],
             [ 48.629278, 12.090454, "Somewhere in A (002)" ],
             [ 48.432845, 10.283203, "Somewhere in A (003)" ],
-            [ 48.239309, 15.441284, "Somewhere in A (004)" ] 
+            [ 48.239309, 15.441284, "Somewhere in A (004)" ],
+            [ 48.136767, 14.320679, "Somewhere in A (005)" ],
+            [ 47.077604, 15.435791, "Somewhere in A (006)" ], 
+            [ 48.167001, 16.487732, "Somewhere in A (007)" ], 
+            [ 48.225588, 16.354523, "Somewhere in A (008)" ], 
+            [ 48.199049, 16.279678, "Somewhere in A (009)" ], 
+            [ 48.169291, 16.389885, "Somewhere in A (010)" ], 
+            [ 48.225102, 16.356969, "Somewhere in A (011)" ], 
+            [ 48.223472, 16.347141, "Somewhere in A (012)" ], 
+            [ 48.175931, 16.383705, "Somewhere in A (013)" ], 
     ];
 
 
@@ -80,7 +117,8 @@
                                 );
 
     var streets   = L.tileLayer(mbUrl, 
-                                {id: 'mapbox/streets-v11', 
+                                {
+                                    id: 'mapbox/streets-v11', 
                                     tileSize: 512, 
                                     zoomOffset: -1, 
                                     attribution: mbAttr,
@@ -96,8 +134,16 @@
     //Loop through the markers array
     //Alle Punkte aus dem Places-Array der Map bzw. MarkerGroup und dann der Map hinzufügen...
     
-    markerGroup = L.layerGroup();
-    
+    var markerGroup = L.layerGroup();
+    var markers = L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+        var markers = cluster.getAllChildMarkers();
+        var html = '<div class="circle">' + markers.length + '</div>';
+        return L.divIcon({ html: html, className: 'mycluster', iconSize: L.point(32, 32) });
+        },
+        spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: false  
+	});
+
     for (var i=0; i<places.length; i++) {
         
         var lon = places[i][0];
@@ -107,6 +153,8 @@
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation);
         
+        markers.addLayer(marker);
+
         // mymap.addLayer(marker);
 
         // marker.bindPopup(popupText);
@@ -115,7 +163,8 @@
 
     }
 
-    mymap.addLayer(markerGroup);
+    mymap.addLayer(markers);
+    // mymap.addLayer(markerGroup);
 
     var baseMaps = {
         "Grayscale": grayscale,
@@ -123,8 +172,10 @@
     };  
 
     var overlayMaps = {
-        "MarkerGroup": markerGroup
+        "MarkerGroup": markerGroup,
+        "MarkerCluster": markers
     };
+
 
     L.control.layers(baseMaps, overlayMaps).addTo(mymap);
 
@@ -135,10 +186,7 @@
     };
 
 
-    //usage MarkerClusters...
-    // var markers = L.markerClusterGroup();
-    // markers.addLayer(L.marker(getRandomLatLng(map)));
-    // map.addLayer(markers);
+
 
     mymap.on('click', function(e) {
         //alert(e.latlng);
