@@ -30,7 +30,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
     <style>
-        .circle {
+        /* .circle {
             width: 52px;
             height: 52px;
             line-height: 55px;
@@ -38,18 +38,24 @@
             text-align: center;
             font-size: 16px;
             font-weight: bold;
-        }
+        } */
 
         .mask {
             position: absolute;
-            top: -50px;                     /* minus half the div size */
-            left: -50px;                    /* minus half the div size */
+            top: -1px;                     /* minus half the div size */
+            left: -1px;                    /* minus half the div size */
             width: 100px;                   /* the div size */
             height: 100px;                  /* the div size */
-            background-color: transparent;
-            border-radius: 100px;           /* the div size */
-            border: 50px solid black;       /* half the div size */
+            background-color: rgb(256, 256, 256, 0.7); 
+            border-radius: 50px;   /*Stw.: rounded corners*/        
+            border: 2px solid #3188b6;       
             pointer-events: none;           /* send mouse events beneath this layer */
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+            color: #3188b6;
+            font-weight: bold;
+            /* opacity:0.5 */
         }
 	</style>
     
@@ -138,8 +144,8 @@
     var markers = L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
-        var html = '<div class="circle">' + markers.length + '</div>';
-        return L.divIcon({ html: html, className: 'mycluster', iconSize: L.point(32, 32) });
+        var html = '<div>' + markers.length + '</div>';
+        return L.divIcon({ html: html, className: 'mask', iconSize: L.point(50, 50)});
         },
         spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: false  
 	});
