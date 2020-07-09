@@ -1,6 +1,13 @@
 <?php
 //MarkerCluster-Plugin
 // https://github.com/Leaflet/Leaflet.markercluster#using-the-plugin
+
+//Stw. CSRF
+session_start();
+$_SESSION['csrf_token'] = uniqid('', true);
+
+require('myClasses\Vcoeoci.class.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +19,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
-    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
@@ -27,7 +34,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 
     <style>
         /* .circle {
@@ -48,11 +55,11 @@
             height: 100px;                  /* the div size */
             background-color: rgb(256, 256, 256, 0.7); 
             border-radius: 50px;   /*Stw.: rounded corners*/        
-            border: 2px solid #3188b6;       
+            border: 3px solid #3188b6;       
             pointer-events: none;           /* send mouse events beneath this layer */
             text-align: center;
-            line-height: 50px;
-            font-size: 20px;
+            line-height: 49px;
+            font-size: 14px;
             color: #3188b6;
             font-weight: bold;
             /* opacity:0.5 */
@@ -65,8 +72,6 @@
 
 </head>
 <body>
-    
-    <div><p>Hello Map!</p></div>
 
     <div id="mapid"></div>
 
@@ -89,6 +94,12 @@
     // golden    = L.marker([48.432845, 10.283203]).bindPopup('This is Golden, CO.');
 
     // var cities = L.layerGroup([littleton, denver, aurora, golden]);
+
+    <?php
+    // $vcoe = New myClasses\Vcoeoci;
+    // $vcoe->
+    
+    ?>
 
     var places = [
             [ 47.312759, 12.420044, "Somewhere in A (001)" ],
@@ -204,7 +215,7 @@
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<h3>Schau mal!</h3><br /><p>This is a nice popup at...' + e.latlng + '</p><form action="#" method="post"><div class="form-group"><input type="text" class="form-control" id="text1"><br /><br /><textarea type="text" class="form-control" id="text2" rows="3"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
+            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
         )
         .openOn(mymap);
 
