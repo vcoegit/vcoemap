@@ -32,10 +32,10 @@ protected function __construct(){
         // self::$conn = new PDO("mysql:host=$servername;dbname=$dbname; username=$username; password=$password");
         self::$conn = new PDO($dsn, $user, $password);
         self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo 'Connection worked!';
+        // echo 'Connection worked!';
     } catch(PDOException $e) {
-        echo 'Fehler! - Datenbankverbindung konnte nicht hergestellt werden '; 
-        echo "Fehler",  $e->getMessage();
+        // echo 'Fehler! - Datenbankverbindung konnte nicht hergestellt werden '; 
+        // echo "Fehler",  $e->getMessage();
     }
 }
 

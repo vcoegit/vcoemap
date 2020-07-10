@@ -250,6 +250,30 @@ class Vcoeoci{
 
     }
 
+    Public Function ArrayFromDB(string $query) : array {
+
+        $arr = [];
+
+        foreach ($this->conn->query($query) as $row) {
+        
+            $marker = [
+                // $row['entryid'],
+                // $row['title'], 
+                // $row['body'], 
+                // $row['email'],
+                $row['lat'],
+                $row['lon'], 
+                $row['title']
+            ];
+
+        $arr[] = $marker;
+
+        }
+
+        return $arr;
+
+    }
+
     Public Function Execute(string $query) : int {
         
         // foreach ($this->conn->query($query) as $row) {

@@ -5,10 +5,10 @@
 //Stw. CSRF
 session_start();
 $_SESSION['csrf_token'] = uniqid('', true);
-
 require('myClasses\Vcoeoci.class.php');
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +55,7 @@ require('myClasses\Vcoeoci.class.php');
             height: 100px;                  /* the div size */
             background-color: rgb(256, 256, 256, 0.7); 
             border-radius: 50px;   /*Stw.: rounded corners*/        
-            border: 3px solid #3188b6;       
+            border: 2px solid #3188b6;       
             pointer-events: none;           /* send mouse events beneath this layer */
             text-align: center;
             line-height: 49px;
@@ -66,56 +66,50 @@ require('myClasses\Vcoeoci.class.php');
         }
 	</style>
     
-    
     <title>vcoemap</title>
-
 
 </head>
 <body>
 
     <div id="mapid"></div>
 
+ 
+ <?php
+    $arr = [];
+    $query = "SELECT * FROM ENTRIES";
+
+    $vcoe = New myClasses\Vcoeoci;
+    $arr = $vcoe->ArrayFromDB($query);
+
+    //print("<pre>".print_r($arr,true)."</pre>");
+    // echo print_r($arr,true);
+?>
+
 <script>
 
-    //var mymap = L.map('mapid').setView([51.505, -0.09], 13);
 
-    // L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    // maxZoom: 18,
-    // id: 'mapbox/streets-v11',
-    // tileSize: 512,
-    // zoomOffset: -1,
-    // accessToken: 'pk.eyJ1IjoibWFwcGVuaGVpbWVyIiwiYSI6ImNrMDJxaGltYzFoeWszYnBkbzd4amgxOGMifQ.jm6QRmXrLzHJBPBJ4SOWXA'
-    // }).addTo(mymap);
 
-    // var littleton = L.marker([47.312759, 12.420044]).bindPopup('This is Littleton, CO.'),
-    // denver    = L.marker([48.239309, 15.441284]).bindPopup('This is Denver, CO.'),
-    // aurora    = L.marker([48.629278, 12.090454]).bindPopup('This is Aurora, CO.'),
-    // golden    = L.marker([48.432845, 10.283203]).bindPopup('This is Golden, CO.');
+// how to access elements in multi-dimensional array in JavaScript
+//alert( products[0][1] ); // Chocolate Cake
 
-    // var cities = L.layerGroup([littleton, denver, aurora, golden]);
+var places = <?php echo json_encode( $arr ) ?>;
 
-    <?php
-    // $vcoe = New myClasses\Vcoeoci;
-    // $vcoe->
-    
-    ?>
+    // var places = [
+    //         [ 47.312759, 12.420044, "Somewhere in A (001)" ],
+    //         [ 48.629278, 12.090454, "Somewhere in A (002)" ],
+    //         [ 48.432845, 10.283203, "Somewhere in A (003)" ],
+    //         [ 48.239309, 15.441284, "Somewhere in A (004)" ],
+    //         [ 48.136767, 14.320679, "Somewhere in A (005)" ],
+    //         [ 47.077604, 15.435791, "Somewhere in A (006)" ], 
+    //         [ 48.167001, 16.487732, "Somewhere in A (007)" ], 
+    //         [ 48.225588, 16.354523, "Somewhere in A (008)" ], 
+    //         [ 48.199049, 16.279678, "Somewhere in A (009)" ], 
+    //         [ 48.169291, 16.389885, "Somewhere in A (010)" ], 
+    //         [ 48.225102, 16.356969, "Somewhere in A (011)" ], 
+    //         [ 48.223472, 16.347141, "Somewhere in A (012)" ], 
+    //         [ 48.175931, 16.383705, "Somewhere in A (013)" ], 
+    // ];
 
-    var places = [
-            [ 47.312759, 12.420044, "Somewhere in A (001)" ],
-            [ 48.629278, 12.090454, "Somewhere in A (002)" ],
-            [ 48.432845, 10.283203, "Somewhere in A (003)" ],
-            [ 48.239309, 15.441284, "Somewhere in A (004)" ],
-            [ 48.136767, 14.320679, "Somewhere in A (005)" ],
-            [ 47.077604, 15.435791, "Somewhere in A (006)" ], 
-            [ 48.167001, 16.487732, "Somewhere in A (007)" ], 
-            [ 48.225588, 16.354523, "Somewhere in A (008)" ], 
-            [ 48.199049, 16.279678, "Somewhere in A (009)" ], 
-            [ 48.169291, 16.389885, "Somewhere in A (010)" ], 
-            [ 48.225102, 16.356969, "Somewhere in A (011)" ], 
-            [ 48.223472, 16.347141, "Somewhere in A (012)" ], 
-            [ 48.175931, 16.383705, "Somewhere in A (013)" ], 
-    ];
 
 
 	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
