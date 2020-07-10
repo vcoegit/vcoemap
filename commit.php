@@ -43,18 +43,13 @@ if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
     $echo .= 'no email' . '<br />';
 }
 
-if(key_exists('lat', $_POST) && $_POST['lat'] > 0){
-    $lat = $_POST['lat'];
-}
+// if(key_exists('lat', $_POST) && $_POST['lat'] > 0){
+//     $lat = $_POST['lat'];
+// }
 
-if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
-    $lng = $_POST['lng'];
-}
-
-/**
- * zum Testen wird das da augegeben...
- */
-echo $echo;
+// if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
+//     $lng = $_POST['lng'];
+// }
 
 /**
  * Eingaben in Datenbank speichern!
@@ -63,14 +58,9 @@ $vcoe = New myClasses\Vcoeoci;
 $query = "insert into entries (title, body, lon, lat, EPSG, email) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email')"; 
 
 if($vcoe->execute($query)>0){
-    echo "Ihr Beitrag wurde gespeichert!";
+    // echo "Ihr Beitrag wurde gespeichert!";
+    header("Location: index.php");
+    die();
 };
-
-
-/**
- * für später...
- */
-// header("Location: index.php");
-// die();
 
 ?>

@@ -136,6 +136,17 @@ var places = <?php echo json_encode( $arr ) ?>;
                                 }
                                 );
 
+
+    <?php 
+        if(key_exists('center', $_POST) && $_POST['center']>0){
+            $center = $_POST['center'];
+        }
+
+        if(key_exists('zoom', $_POST) && $_POST['zoom']>0){
+            $center = $_POST['zoom'];
+        }
+    ?>
+
     var mymap = L.map('mapid', {
         center: [47.661688,13.090210],
         zoom: 8,
@@ -159,16 +170,18 @@ var places = <?php echo json_encode( $arr ) ?>;
         
         var lon = places[i][0];
         var lat = places[i][1];
-        var popupText = places[i][2];
+        var title = places[i][2];
+        var body = places[i][3];
         
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation);
+        marker.bindPopup('<h3>'+title+'</h3>'+
+                '<img src="images/lowgo.jpg" alt="" height="189" width="189">'+
+                '<br><p>'+body+'</p>');
         
         markers.addLayer(marker);
 
         // mymap.addLayer(marker);
-
-        // marker.bindPopup(popupText);
 
         markerGroup.addLayer(marker);
 
@@ -209,7 +222,7 @@ var places = <?php echo json_encode( $arr ) ?>;
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
+            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="center" value="' + mymap.getCenter() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
         )
         .openOn(mymap);
 

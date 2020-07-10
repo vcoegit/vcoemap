@@ -257,13 +257,10 @@ class Vcoeoci{
         foreach ($this->conn->query($query) as $row) {
         
             $marker = [
-                // $row['entryid'],
-                // $row['title'], 
-                // $row['body'], 
-                // $row['email'],
                 $row['lat'],
                 $row['lon'], 
-                $row['title']
+                $row['title'],
+                $row['body']
             ];
 
         $arr[] = $marker;
@@ -276,20 +273,10 @@ class Vcoeoci{
 
     Public Function Execute(string $query) : int {
         
-        // foreach ($this->conn->query($query) as $row) {
-        //     print $row['entryid'] . "\t";
-        // }
-
         $insert = $this->conn->prepare($query);
         $insert->execute();
-        
-        // $this->conn->query($query);
-
-        // $recAffs = $this->conn->rowCount(); 
 
         $recAffs = $insert->rowCount();
-
-        // PDOStatement::rowCount ( void ) : int
 
         return $recAffs;
 
