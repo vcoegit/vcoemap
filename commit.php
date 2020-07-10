@@ -12,6 +12,21 @@ session_start();
  if($_POST['csrf'] !== $_SESSION['csrf_token']) {
     die("Ungültiger Token");
 }
+
+if(key_exists('centerLng', $_POST) && $_POST['centerLng'] > 0){
+    $_SESSION['centerLng'] = $_POST['centerLng'];
+    // $center = $_POST['center']; 
+}
+
+if(key_exists('centerLat', $_POST) && $_POST['centerLat'] > 0){
+    $_SESSION['centerLat'] = $_POST['centerLat'];
+    // $center = $_POST['center'];
+}
+
+if(key_exists('zoom', $_POST) && $_POST['zoom'] > 0){
+    $_SESSION['zoom'] = $_POST['zoom'];
+    // $zoom = $_POST['zoom'];
+}
    
 $echo = '';
 $title = '';
@@ -43,13 +58,13 @@ if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
     $echo .= 'no email' . '<br />';
 }
 
-// if(key_exists('lat', $_POST) && $_POST['lat'] > 0){
-//     $lat = $_POST['lat'];
-// }
+if(key_exists('lat', $_POST) && $_POST['lat'] > 0){
+    $lat = $_POST['lat'];
+}
 
-// if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
-//     $lng = $_POST['lng'];
-// }
+if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
+    $lng = $_POST['lng'];
+}
 
 /**
  * Eingaben in Datenbank speichern!

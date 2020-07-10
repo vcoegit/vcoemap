@@ -4,7 +4,20 @@
 
 //Stw. CSRF
 session_start();
+
+$now = time();
+if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
+    // this session has worn out its welcome; kill it and start a brand new one
+    session_unset();
+    session_destroy();
+    session_start();
+}
+
+// either new or old, it should live at most for another hour
+$_SESSION['discard_after'] = $now + 100;
+
 $_SESSION['csrf_token'] = uniqid('', true);
+
 require('myClasses\Vcoeoci.class.php');
 
 ?>
@@ -136,20 +149,14 @@ var places = <?php echo json_encode( $arr ) ?>;
                                 }
                                 );
 
-
-    <?php 
-        if(key_exists('center', $_POST) && $_POST['center']>0){
-            $center = $_POST['center'];
-        }
-
-        if(key_exists('zoom', $_POST) && $_POST['zoom']>0){
-            $center = $_POST['zoom'];
-        }
-    ?>
+    
 
     var mymap = L.map('mapid', {
-        center: [47.661688,13.090210],
-        zoom: 8,
+        center: [
+                <?= key_exists('centerLat', $_SESSION) ? $_SESSION['centerLat'] : 47.661688; ?>,
+                <?= key_exists('centerLng', $_SESSION) ? $_SESSION['centerLng'] : 13.090210; ?>
+                ],
+        zoom: <?= key_exists('zoom', $_SESSION) ? $_SESSION['zoom'] : 8; ?>,
         layers: [grayscale]
     });
 
@@ -210,19 +217,19 @@ var places = <?php echo json_encode( $arr ) ?>;
     };
 
 
-
-
     mymap.on('click', function(e) {
         //alert(e.latlng);
         
         //Marker
         L.marker(e.latlng).addTo(mymap);
         
+
+
         //Popup
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="center" value="' + mymap.getCenter() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
+            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
         )
         .openOn(mymap);
 
