@@ -260,7 +260,8 @@ class Vcoeoci{
                 $row['lat'],
                 $row['lon'], 
                 $row['title'],
-                $row['body']
+                $row['body'],
+                $row['filepath']
             ];
 
         $arr[] = $marker;

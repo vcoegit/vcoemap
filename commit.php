@@ -67,10 +67,27 @@ if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
 }
 
 /**
+ * und dann gibt es noch den File-Upload...
+ */
+$tmp_name = $_FILES["watchthispix"]["tmp_name"];
+$uploadfilename = $_FILES["watchthispix"]["name"];
+$saveddate = date("mdy-Hms");
+$newfilename = "uploads/".$saveddate."_".$uploadfilename;
+$uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).'/'.$newfilename;
+
+if (move_uploaded_file($tmp_name, $newfilename)):
+    $msg = "File uploaded";
+else:
+    $msg = "Sorry, couldn't upload your profile picture".$_FILES['file']['error'];
+    $formerrors = true;
+endif; //move uploaded file
+
+/**
  * Eingaben in Datenbank speichern!
  */
 $vcoe = New myClasses\Vcoeoci;
-$query = "insert into entries (title, body, lon, lat, EPSG, email) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email')"; 
+$query = "insert into entries (title, body, lon, lat, EPSG, email, filepath) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl')"; 
+
 
 if($vcoe->execute($query)>0){
     // echo "Ihr Beitrag wurde gespeichert!";

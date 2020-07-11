@@ -179,11 +179,12 @@ var places = <?php echo json_encode( $arr ) ?>;
         var lat = places[i][1];
         var title = places[i][2];
         var body = places[i][3];
+        var filepath = places[i][4];
         
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation);
         marker.bindPopup('<h3>'+title+'</h3>'+
-                '<img src="images/lowgo.jpg" alt="" height="189" width="189">'+
+                '<img src="' + filepath + '" alt="" height="189" width="189">'+
                 '<br><p>'+body+'</p>');
         
         markers.addLayer(marker);
@@ -229,15 +230,13 @@ var places = <?php echo json_encode( $arr ) ?>;
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
+            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="102400"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accespt="image/*"><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
         )
         .openOn(mymap);
 
     });
 
 </script>
-
-
 
 </body>
 </html>
