@@ -46,8 +46,7 @@ require('myClasses\Vcoeoci.class.php');
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    
-    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+    <script src="jQuery/jquery-3.5.1.min.js"></script>
 
     <style>
         /* .circle {
@@ -84,7 +83,9 @@ require('myClasses\Vcoeoci.class.php');
 </head>
 <body>
 
-    <div id="mapid"></div>
+    <button type="button" class="btn btn-primary btn-sm" id="slide-toggle">Eingabeformular ausblenden</button>
+
+    <div id="mapid" class="mapid"></div>
 
  
  <?php
@@ -224,19 +225,93 @@ var places = <?php echo json_encode( $arr ) ?>;
         //Marker
         L.marker(e.latlng).addTo(mymap);
         
-
-
         //Popup
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<h3>was mir hier aufgefallen ist...</h3><p>This is a nice popup at...' + e.latlng + '</p><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail"><br /><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="report" name="report" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="102400"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accespt="image/*"><br /><br /><button type="submit" class="btn btn-primary mb-2">Eintrag bestätigen</button></div></form>'
+            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Tempo</option><option>Platzaufteilung</option><option>Gefahrenstelle</option><option>Sichtbarkeit</option><option>Barriere</option><option>Sonstiges...</option></select></div><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="102400"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submin">Eintrag bestätigen</button></div></div></form></div>'
         )
         .openOn(mymap);
 
     });
 
+    /**
+     * jQuery...
+     */
+
+    $(document).ready(function(){
+        $('#slide-toggle').click( function() {
+                $('#formPanel').animate({width: 'toggle'});
+
+                if ($('#slide-toggle').html() == 'Eingabeformular anzeigen'){
+                    $('#slide-toggle').html('Eingabeformular ausblenden');
+                }else{
+                    $('#slide-toggle').html('Eingabeformular anzeigen');
+                }
+        });
+    });
+
+
 </script>
+
+<div id="formPanel" class="mapid stack-top">
+
+<h1>und so funktioniert's...</h1>
+<h2>entweder</h2>
+<p>1) Zoomen sie in der Karte an die Stelle, zu der sie uns etwas mitteilen wollen.</p>
+<p>2) Klicken sie auf die Karte.</p>
+<p>3) Ein Popup öffnet sich - Hier können sie ihr Problem beschreiben, ein Foto hochladen...</p>
+<p>3) Sie erhalten ein Email von uns um die Richtigkeit ihrer Email-Adresse zu bestätigen.</p>
+<p>3) Kurz nachdem sie den Bestätigungslink geklickt haben, wird der Eintrag auf dieser Seite sichtbar.</p>
+<h2>oder</h2>
+<p>1) Suchen sie hier nach einer Adresse</p>
+<p>2) Lassen sie sich an die entsprechende Stelle führen.</p>
+<p>2) Klicken Sie in die Karte.</p>
+<p>3) Ein Popup öffnet sich - Hier können sie ihr Problem beschreiben, ein Foto hochladen...</p>
+    <!-- <br /><br /><br /><br />
+    <div class="container">
+        <h4>was mir hier aufgefallen ist...</h4>
+        <form action="commit.php" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="lat" value="' + e.latlng.lat + '">
+                <input type="hidden" name="lng" value="' + e.latlng.lng + '">
+                <input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '">
+                <input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '">
+                <input type="hidden" name="zoom" value="' + mymap.getZoom() + '">
+                <input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required>
+            </div>
+                
+            <div class="form-group">
+                <label for="notificationtype">Kategorie</label>
+                <select class="form-control" id="notificationtype" name="notificationtype">
+                    <option>Tempo</option>
+                    <option>Platzaufteilung</option>
+                    <option>Gefahrenstelle</option>
+                    <option>Sichtbarkeit</option>
+                    <option>Barriere</option>
+                    <option>Sonstiges...</option
+                ></select>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" class="form-control" id="title" name="title" placeholder="Titel">
+                <br /><br />
+                <textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea>
+                <br /><br />
+                <input type="hidden" name="MAX_FILE_SIZE" value="102400">
+                <input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br />
+            </div>
+
+            <div class="form-group">
+                <div class="buttons">
+                    <button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button>
+                </div>
+            </div>
+        </form>
+    </div> -->
+
+</div>
 
 </body>
 </html>

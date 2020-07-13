@@ -1,3 +1,34 @@
-#mapid { 
-    height: 850px; 
+.mapid { 
+    width: 100%;
+    height: 100%; 
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 9;
 }
+
+.stack-top{
+    width:55%;
+    top: 10%;
+    height: 85%;
+    background-color: white;
+    opacity: 0.9;  /* for demo purpose  */
+    z-index: 10;
+    border-radius: 0px 50px 50px 0px;   /*Stw.: rounded corners*/        
+    border: 2px solid #3188b6;  
+}
+
+#slide-toggle{
+    position: absolute;
+    top: 0px;
+    left: 45px;
+    z-index: 11;
+    margin: 1em;
+}
+
+#formPanel{
+    padding: 0em 2em;
+}
+
+
+

@@ -44,11 +44,18 @@ if(key_exists('title', $_POST) && strlen($_POST['title'])>0){
     $echo .= 'no title' . '<br />';
 }
 
-if(key_exists('report', $_POST) && strlen($_POST['report'])>0){
-    $body = htmlentities($_POST['report']);
-    $echo .= htmlentities($_POST['report']) . "<br />";
+if(key_exists('body', $_POST) && strlen($_POST['body'])>0){
+    $body = htmlentities($_POST['body']);
+    $echo .= htmlentities($_POST['body']) . "<br />";
 }else{
-    $echo .= 'no report' . '<br />';
+    $echo .= 'no body' . '<br />';
+}
+
+if(key_exists('notificationtype', $_POST) && strlen($_POST['notificationtype'])>0){
+    $notificationtype = htmlentities($_POST['notificationtype']);
+    $echo .= htmlentities($_POST['notificationtype']) . "<br />";
+}else{
+    $echo .= 'no body' . '<br />';
 }
 
 if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
@@ -86,7 +93,7 @@ endif; //move uploaded file
  * Eingaben in Datenbank speichern!
  */
 $vcoe = New myClasses\Vcoeoci;
-$query = "insert into entries (title, body, lon, lat, EPSG, email, filepath) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl')"; 
+$query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl', '$notificationtype')"; 
 
 
 if($vcoe->execute($query)>0){
