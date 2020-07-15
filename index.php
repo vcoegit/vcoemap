@@ -2,6 +2,10 @@
 //MarkerCluster-Plugin
 // https://github.com/Leaflet/Leaflet.markercluster#using-the-plugin
 
+//Overlay inspired by:
+//https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp
+
+
 //Stw. CSRF
 session_start();
 
@@ -49,33 +53,90 @@ require('myClasses\Vcoeoci.class.php');
     <script src="jQuery/jquery-3.5.1.min.js"></script>
 
     <style>
-        /* .circle {
-            width: 52px;
-            height: 52px;
-            line-height: 55px;
-            background-image: url('circle6.gif');
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-        } */
+    /* .circle {
+        width: 52px;
+        height: 52px;
+        line-height: 55px;
+        background-image: url('circle6.gif');
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+    } */
 
-        .mask {
-            position: absolute;
-            top: -1px;                     /* minus half the div size */
-            left: -1px;                    /* minus half the div size */
-            width: 100px;                   /* the div size */
-            height: 100px;                  /* the div size */
-            background-color: rgb(256, 256, 256, 0.7); 
-            border-radius: 50px;   /*Stw.: rounded corners*/        
-            border: 2px solid #3188b6;       
-            pointer-events: none;           /* send mouse events beneath this layer */
-            text-align: center;
-            line-height: 49px;
-            font-size: 14px;
-            color: #3188b6;
-            font-weight: bold;
-            /* opacity:0.5 */
-        }
+    .mask {
+        position: absolute;
+        top: -1px;                     /* minus half the div size */
+        left: -1px;                    /* minus half the div size */
+        width: 100px;                   /* the div size */
+        height: 100px;                  /* the div size */
+        background-color: rgb(256, 256, 256, 0.7); 
+        border-radius: 50px;   /*Stw.: rounded corners*/        
+        border: 2px solid #3188b6;       
+        pointer-events: none;           /* send mouse events beneath this layer */
+        text-align: center;
+        line-height: 49px;
+        font-size: 14px;
+        color: #3188b6;
+        font-weight: bold;
+        /* opacity:0.5 */
+    }
+
+    body {
+    font-family: verdana,arial,sans-serif;
+    }
+
+    .overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #3188b6;
+    background-color: #3188b6;
+    overflow-x: hidden;
+    transition: 0.5s;
+    z-index: 9;
+    opacity: 0.9;
+    }
+
+    .overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: left;
+    margin-top: 30px;
+    }
+
+    .overlay a, .overlay h1, .overlay h2, .overlay h3, .overlay p, .overlay li {
+    text-decoration: none;
+    color: #f1fff1;
+    transition: 0.3s;
+    }
+
+    .overlay li{
+        font-size: 14px;
+    }
+
+    .overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+    }
+
+    .overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+    }
+
+    @media screen and (max-height: 450px) {
+    .overlay a {font-size: 20px}
+    .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+    }
+    }
+
 	</style>
     
     <title>vcoemap</title>
@@ -83,11 +144,13 @@ require('myClasses\Vcoeoci.class.php');
 </head>
 <body>
 
-    <button type="button" class="btn btn-primary btn-sm" id="slide-toggle">Eingabeformular ausblenden</button>
-
     <div id="mapid" class="mapid"></div>
 
- 
+    <button type="button" class="btn btn-primary btn-sm infobtn" onclick="openNav()" id="slide-toggle"><svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+    <circle cx="8" cy="4.5" r="1"/>
+    </svg></button>
+
  <?php
     $arr = [];
     $query = "SELECT * FROM ENTRIES";
@@ -107,24 +170,6 @@ require('myClasses\Vcoeoci.class.php');
 //alert( products[0][1] ); // Chocolate Cake
 
 var places = <?php echo json_encode( $arr ) ?>;
-
-    // var places = [
-    //         [ 47.312759, 12.420044, "Somewhere in A (001)" ],
-    //         [ 48.629278, 12.090454, "Somewhere in A (002)" ],
-    //         [ 48.432845, 10.283203, "Somewhere in A (003)" ],
-    //         [ 48.239309, 15.441284, "Somewhere in A (004)" ],
-    //         [ 48.136767, 14.320679, "Somewhere in A (005)" ],
-    //         [ 47.077604, 15.435791, "Somewhere in A (006)" ], 
-    //         [ 48.167001, 16.487732, "Somewhere in A (007)" ], 
-    //         [ 48.225588, 16.354523, "Somewhere in A (008)" ], 
-    //         [ 48.199049, 16.279678, "Somewhere in A (009)" ], 
-    //         [ 48.169291, 16.389885, "Somewhere in A (010)" ], 
-    //         [ 48.225102, 16.356969, "Somewhere in A (011)" ], 
-    //         [ 48.223472, 16.347141, "Somewhere in A (012)" ], 
-    //         [ 48.175931, 16.383705, "Somewhere in A (013)" ], 
-    // ];
-
-
 
 	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 	    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -239,78 +284,55 @@ var places = <?php echo json_encode( $arr ) ?>;
      * jQuery...
      */
 
-    $(document).ready(function(){
-        $('#slide-toggle').click( function() {
-                $('#formPanel').animate({width: 'toggle'});
 
-                if ($('#slide-toggle').html() == 'Eingabeformular anzeigen'){
-                    $('#slide-toggle').html('Eingabeformular ausblenden');
-                }else{
-                    $('#slide-toggle').html('Eingabeformular anzeigen');
-                }
-        });
-    });
+    function openNav() {
+    document.getElementById("formPanel").style.width = "100%";
+    }
 
+    function closeNav() {
+    document.getElementById("formPanel").style.width = "0%";
+    }
 
 </script>
 
-<div id="formPanel" class="mapid stack-top">
-
-<h1>und so funktioniert's...</h1>
-<h2>entweder</h2>
-<p>1) Zoomen sie in der Karte an die Stelle, zu der sie uns etwas mitteilen wollen.</p>
-<p>2) Klicken sie auf die Karte.</p>
-<p>3) Ein Popup öffnet sich - Hier können sie ihr Problem beschreiben, ein Foto hochladen...</p>
-<p>3) Sie erhalten ein Email von uns um die Richtigkeit ihrer Email-Adresse zu bestätigen.</p>
-<p>3) Kurz nachdem sie den Bestätigungslink geklickt haben, wird der Eintrag auf dieser Seite sichtbar.</p>
-<h2>oder</h2>
-<p>1) Suchen sie hier nach einer Adresse</p>
-<p>2) Lassen sie sich an die entsprechende Stelle führen.</p>
-<p>2) Klicken Sie in die Karte.</p>
-<p>3) Ein Popup öffnet sich - Hier können sie ihr Problem beschreiben, ein Foto hochladen...</p>
-    <!-- <br /><br /><br /><br />
+<div id="formPanel" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <div class="overlay-content">
     <div class="container">
-        <h4>was mir hier aufgefallen ist...</h4>
-        <form action="commit.php" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>">
-                <input type="hidden" name="lat" value="' + e.latlng.lat + '">
-                <input type="hidden" name="lng" value="' + e.latlng.lng + '">
-                <input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '">
-                <input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '">
-                <input type="hidden" name="zoom" value="' + mymap.getZoom() + '">
-                <input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required>
+        <div class="row howto">
+            <div class="col-sm-6">
+            <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-in" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
+                <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5z"/>
+            </svg> In die Karte zoomen.</p>
             </div>
-                
-            <div class="form-group">
-                <label for="notificationtype">Kategorie</label>
-                <select class="form-control" id="notificationtype" name="notificationtype">
-                    <option>Tempo</option>
-                    <option>Platzaufteilung</option>
-                    <option>Gefahrenstelle</option>
-                    <option>Sichtbarkeit</option>
-                    <option>Barriere</option>
-                    <option>Sonstiges...</option
-                ></select>
+        </div>
+        <div class="row howto">
+            <div class="col-sm-6">
+            <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-mouse2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3 5.188C3 2.341 5.22 0 8 0s5 2.342 5 5.188v5.625C13 13.658 10.78 16 8 16s-5-2.342-5-5.188V5.189zm4.5-4.155C5.541 1.289 4 3.035 4 5.188V5.5h3.5V1.033zm1 0V5.5H12v-.313c0-2.152-1.541-3.898-3.5-4.154zM12 6.5H4v4.313C4 13.145 5.81 15 8 15s4-1.855 4-4.188V6.5z"/>
+            </svg> In die Karte klicken</p>      
             </div>
-            
-            <div class="form-group">
-                <input type="text" class="form-control" id="title" name="title" placeholder="Titel">
-                <br /><br />
-                <textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea>
-                <br /><br />
-                <input type="hidden" name="MAX_FILE_SIZE" value="102400">
-                <input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br />
+        </div>
+        <div class="row howto">
+            <div class="col-sm-6">
+            <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-input-cursor" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 5h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4v1h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4v1zM6 5V4H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v-1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4z"/>
+                <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13A.5.5 0 0 1 8 1z"/>
+            </svg> Problem beschreiben.</p>     
             </div>
-
-            <div class="form-group">
-                <div class="buttons">
-                    <button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button>
-                </div>
+        </div>
+        <div class="row howto">
+            <div class="col-sm-6">
+            <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+            </svg> Bestätigungslink im Email anklicken</p>  
             </div>
-        </form>
-    </div> -->
-
+        </div>
+    </div>
+  </div>
 </div>
 
 </body>

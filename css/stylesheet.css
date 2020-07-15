@@ -4,31 +4,39 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 9;
-}
-
-.stack-top{
-    width:55%;
-    top: 10%;
-    height: 85%;
-    background-color: white;
-    opacity: 0.9;  /* for demo purpose  */
-    z-index: 10;
-    border-radius: 0px 50px 50px 0px;   /*Stw.: rounded corners*/        
-    border: 2px solid #3188b6;  
+    z-index: 1;
 }
 
 #slide-toggle{
     position: absolute;
-    top: 0px;
-    left: 45px;
-    z-index: 11;
-    margin: 1em;
-}
-
-#formPanel{
-    padding: 0em 2em;
+    top: 75px;
+    left: 12px;
+    z-index: 2;
+    background-color: #3188b6;
+    border-color: #3188b6;
 }
 
 
+h1, h2{
+    color: #f1fff1;
+}
+
+.row.howto{
+    background-color: #3188b6;
+    color: whitesmoke;
+}
+
+.bi{
+    color: #f1fff1;
+    height: 100%;
+}
+
+.overlay p{
+    font-size: 30px;
+}
+
+.infobtn{
+    height: 35px;
+    width: 35px;
+}
 
