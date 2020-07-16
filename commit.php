@@ -3,7 +3,11 @@
 /**
  * Hierher wird das Formular des Popups geschickt!
  */
-require('myClasses\Vcoeoci.class.php');
+
+ require('myClasses\Vcoeoci.class.php'); 
+ require('myClasses\EmailTemplate.class.php');
+ require('myClasses\Email.class.php');
+ require('myClasses\Mailer.class.php');
 
 /**
  * Stimmmt das csrf-Token?
@@ -60,9 +64,11 @@ if(key_exists('notificationtype', $_POST) && strlen($_POST['notificationtype'])>
 
 if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
     $email = htmlentities($_POST['email']);
+    $hashed_email = hash('md4', 'Stringedingeding' . 'salt&pepper');
     $echo .= htmlentities($_POST['email']) . "<br />";
 }else{
     $echo .= 'no email' . '<br />';
+    $hashed_email = '';
 }
 
 if(key_exists('lat', $_POST) && $_POST['lat'] > 0){
@@ -85,7 +91,7 @@ $uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).
 if (move_uploaded_file($tmp_name, $newfilename)):
     $msg = "File uploaded";
 else:
-    $msg = "Sorry, couldn't upload your profile picture".$_FILES['file']['error'];
+    $msg = "Sorry, couldn't upload your picture".$_FILES['file']['error'];
     $formerrors = true;
 endif; //move uploaded file
 
@@ -93,7 +99,23 @@ endif; //move uploaded file
  * Eingaben in Datenbank speichern!
  */
 $vcoe = New myClasses\Vcoeoci;
-$query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl', '$notificationtype')"; 
+$query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl', '$notificationtype', '$hashed_email')"; 
+
+/**
+ * Email erstellen...
+ */
+$objEmailTemplate = New myClasses\EmailTemplate($email, $hashed_email);
+
+/**
+ * Email-Bestätigungs-Email versenden...
+ */         
+$objMailer = New myClasses\Mailer($objEmailTemplate);
+$objMailer->sendConfirmationMail();
+
+// echo $objEmail->get_body();
+// echo $objEmail->get_subject();
+// echo 'nix';
+//CODE HERE...
 
 
 if($vcoe->execute($query)>0){

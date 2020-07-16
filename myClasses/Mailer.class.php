@@ -1,14 +1,27 @@
 <?php namespace myClasses;
 
-require_once 'includes/config.php';
+//require_once 'includes/config.php';
+require_once 'vendor/autoload.php';
 
 class Mailer{
 
-    public function __construct(){
+    private $smtp_server;
+    private $username;
+    private $password;
 
+    private $objEmail;
+
+    public function __construct(Email $objEmail){
+        /**
+         * Das könnte man auch in ein Konfigurationsfile auslagern...
+         */
+        $this->objEmail = $objEmail;
+        $this->smtp_server = 'smtp.office365.com';
+        $this->username = 'scc@vcoe.at';
+        $this->password = '!14B6322050Jan';
     }
     
-    public function sendConfirmationMail(string $email, string $hash) : int{
+    public function sendConfirmationMail() : int{
 
     $mailbody = 'Bitte öffnen sie folgenden Link um ihre email-Adresse zu bestätigen. \n';
 
@@ -18,15 +31,17 @@ class Mailer{
             // $message = \Swift_Message::newInstance()
             $message = (new \Swift_Message('Test of Swift Mailer'))
                 // ->setSubject('Test of Swift Mailer')
-                ->setFrom(['christian.schaefer@vcoe.at' => 'Christian Schäfer'])
-                ->setTo('plastic_home@yahoo.com')
-                ->setBody('This is a test of Swift Mailer');
+                ->setFrom($this->objEmail->get_From())
+                ->setTo($this->objEmail->get_To())
+                ->setSubject($this->objEmail->get_Subject())
+                ->setBody($this->objEmail->get_Body())
+            ;
             
             // echo $message->toString();
         
-            $transport = (new \Swift_SmtpTransport($smtp_server, 587, 'tls'))
-                            ->setUsername($username)
-                            ->setPassword($password);
+            $transport = (new \Swift_SmtpTransport($this->smtp_server, 587, 'tls'))
+                            ->setUsername($this->username)
+                            ->setPassword($this->password);
             $mailer = (new \Swift_Mailer($transport));
             $result = $mailer->send($message);
         

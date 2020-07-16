@@ -151,7 +151,7 @@ require('myClasses\Vcoeoci.class.php');
     <circle cx="8" cy="4.5" r="1"/>
     </svg></button>
 
- <?php
+<?php
     $arr = [];
     $query = "SELECT * FROM ENTRIES";
 
