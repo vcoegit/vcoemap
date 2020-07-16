@@ -1,6 +1,5 @@
 <?php namespace myClasses;
 
-//require_once 'includes/config.php';
 require_once 'vendor/autoload.php';
 
 class Mailer{
@@ -8,10 +7,9 @@ class Mailer{
     private $smtp_server;
     private $username;
     private $password;
-
     private $objEmail;
 
-    public function __construct(Email $objEmail){
+    public function __construct(Mail $objEmail){
         /**
          * Das könnte man auch in ein Konfigurationsfile auslagern...
          */
@@ -23,7 +21,7 @@ class Mailer{
     
     public function sendConfirmationMail() : int{
 
-    $mailbody = 'Bitte öffnen sie folgenden Link um ihre email-Adresse zu bestätigen. \n';
+    //$mailbody = 'Bitte öffnen sie folgenden Link um ihre email-Adresse zu bestätigen. \n';
 
         try {
             // prepare email message
@@ -31,7 +29,7 @@ class Mailer{
             // $message = \Swift_Message::newInstance()
             $message = (new \Swift_Message('Test of Swift Mailer'))
                 // ->setSubject('Test of Swift Mailer')
-                ->setFrom($this->objEmail->get_From())
+                ->setFrom(['christian.schaefer@vcoe.at' => 'VCÖ - Mobilität mit Zukunft'])
                 ->setTo($this->objEmail->get_To())
                 ->setSubject($this->objEmail->get_Subject())
                 ->setBody($this->objEmail->get_Body())
@@ -49,7 +47,7 @@ class Mailer{
                 //echo "Number of emails sent:" . $result;
                 return $result;
             }else{
-                // echo "Could't send email";
+                //echo "Could't send email";
                 return 0;
             }
         

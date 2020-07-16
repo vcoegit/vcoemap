@@ -4,10 +4,10 @@
  * Hierher wird das Formular des Popups geschickt!
  */
 
- require('myClasses\Vcoeoci.class.php'); 
- require('myClasses\EmailTemplate.class.php');
- require('myClasses\Email.class.php');
- require('myClasses\Mailer.class.php');
+ include_once('myClasses\Vcoeoci.class.php'); 
+ include_once('myClasses\MailTemplate.class.php');
+ include_once('myClasses\Mail.class.php');
+ include_once('myClasses\Mailer.class.php');
 
 /**
  * Stimmmt das csrf-Token?
@@ -104,13 +104,17 @@ $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, not
 /**
  * Email erstellen...
  */
-$objEmailTemplate = New myClasses\EmailTemplate($email, $hashed_email);
+$objMailTemplate = New myClasses\MailTemplate($email, $hashed_email);
 
 /**
  * Email-Bestätigungs-Email versenden...
  */         
-$objMailer = New myClasses\Mailer($objEmailTemplate);
-$objMailer->sendConfirmationMail();
+$objMailer = New myClasses\Mailer($objMailTemplate);
+if($objMailer->sendConfirmationMail() > 0){
+    var_dump('yepp!');
+}else{
+    var_dump('nope!');
+};
 
 // echo $objEmail->get_body();
 // echo $objEmail->get_subject();
@@ -118,10 +122,10 @@ $objMailer->sendConfirmationMail();
 //CODE HERE...
 
 
-if($vcoe->execute($query)>0){
-    // echo "Ihr Beitrag wurde gespeichert!";
-    header("Location: index.php");
-    die();
-};
+// if($vcoe->execute($query)>0){
+//     // echo "Ihr Beitrag wurde gespeichert!";
+//     header("Location: index.php");
+//     die();
+// };
 
 ?>

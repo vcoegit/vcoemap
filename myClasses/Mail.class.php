@@ -1,7 +1,7 @@
 <?php 
 namespace myClasses;
 
-class Email{
+class Mail{
 
     private $to; //email
     private $from; //email
@@ -14,7 +14,7 @@ class Email{
 
     }
 
-    public function set_to(string $to) : Email{
+    public function set_to(string $to) : Mail{
         $this->to = $to;
         return $this;
     }
@@ -23,7 +23,7 @@ class Email{
         return $this->to;
     }
 
-    public function set_from(string $from) : Email{
+    public function set_from(string $from) : Mail{
         $this->from = $from;
         return $this;
     }
@@ -32,7 +32,7 @@ class Email{
         return $this->from;
     }
 
-    public function set_subject(string $subject) : Email{
+    public function set_subject(string $subject) : Mail{
         $this->subject = $subject;
         return $this;
     }
@@ -41,7 +41,7 @@ class Email{
         return $this->subject;
     }
 
-    public function set_body(string $body) : Email{
+    public function set_body(string $body) : Mail{
         $this->body = $body;
         return $this;
     }
@@ -50,7 +50,7 @@ class Email{
         return $this->body;
     }
 
-    public function add_cc(string $cc) : Email{
+    public function add_cc(string $cc) : Mail{
         $this->cc[] = $cc;
         return $this;
     }
@@ -59,7 +59,7 @@ class Email{
         //CODE HERE
     }
 
-    public function add_bcc(string $bcc) : Email{
+    public function add_bcc(string $bcc) : Mail{
         $this->bcc[] = $bcc;
         return $this;
     }
