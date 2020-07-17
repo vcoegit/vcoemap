@@ -111,21 +111,15 @@ $objMailTemplate = New myClasses\MailTemplate($email, $hashed_email);
  */         
 $objMailer = New myClasses\Mailer($objMailTemplate);
 if($objMailer->sendConfirmationMail() > 0){
-    var_dump('yepp!');
+    // var_dump('yepp!');
+    //nur dann, wenn das email erfolgreich versandt wurde, wird Eintrag gespeichert...
+    if($vcoe->execute($query)>0){
+    // echo "Ihr Beitrag wurde gespeichert!";
+    header("Location: index.php");
+    die();
+};
 }else{
     var_dump('nope!');
 };
-
-// echo $objEmail->get_body();
-// echo $objEmail->get_subject();
-// echo 'nix';
-//CODE HERE...
-
-
-// if($vcoe->execute($query)>0){
-//     // echo "Ihr Beitrag wurde gespeichert!";
-//     header("Location: index.php");
-//     die();
-// };
 
 ?>

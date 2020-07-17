@@ -18,12 +18,12 @@ class MailTemplate extends Mail{
         parent::__construct();
 
         //$link = $_SERVER('HOST_NAME') . "/leaflet2020/$hashed_email";
-        $link = 'LINK' . $hashed_email;
+        $link = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/confirm.php?hsh=' . $hashed_email;
 
-        $this->set_body('<p>Ihre email-Adresse wurde in eines unserer Formulare auf ' . 'SERVERNAME' . ' eingegeben.</p><br />' . 
-        '<p>Um die Richtigkeit dieser Angabe zu bestätigen, klicken Sie bitte folgenden Link an:</p><br >' . $link . '<p>Oder kopieren Sie den Link in die Adresszeile ihres Browsers.</p><br /><br />' . 
-        '<p>Ihr Beitrag erscheint anschließend auf unserer Karte!</p>' . '<br />' .
-        '<p>Vielen Dank für Ihren Beitrag!</p>');
+        $this->set_body('Ihre email-Adresse wurde in eines unserer Formulare auf ' . $_SERVER['SERVER_NAME'] . ' eingegeben.' . "\n" . 
+        'Um die Richtigkeit dieser Angabe zu bestätigen, klicken Sie bitte folgenden Link an:' . "\n" . $link . "\n" . 'Oder kopieren Sie den Link in die Adresszeile ihres Browsers.' . 
+        'Ihr Beitrag erscheint anschließend auf unserer Karte!' . "\n" .
+        'Vielen Dank für Ihren Beitrag!');
 
         $this->set_to($to);
 

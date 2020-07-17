@@ -272,7 +272,7 @@ class Vcoeoci{
 
     }
 
-    Public Function Execute(string $query) : int {
+    Public Function execute(string $query) : int {
         
         $insert = $this->conn->prepare($query);
         $insert->execute();

@@ -146,14 +146,16 @@ require('myClasses\Vcoeoci.class.php');
 
     <div id="mapid" class="mapid"></div>
 
-    <button type="button" class="btn btn-primary btn-sm infobtn" onclick="openNav()" id="slide-toggle"><svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
-    <circle cx="8" cy="4.5" r="1"/>
-    </svg></button>
+    <button type="button" class="btn btn-primary btn-sm infobtn" onclick="openNav()" id="slide-toggle">
+    <svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+        <circle cx="8" cy="4.5" r="1"/>
+    </svg>
+    </button>
 
 <?php
     $arr = [];
-    $query = "SELECT * FROM ENTRIES";
+    $query = "SELECT * FROM ENTRIES WHERE MARKED_DEL = 0";
 
     $vcoe = New myClasses\Vcoeoci;
     $arr = $vcoe->ArrayFromDB($query);
@@ -312,7 +314,7 @@ var places = <?php echo json_encode( $arr ) ?>;
             <div class="col-sm-6">
             <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-mouse2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M3 5.188C3 2.341 5.22 0 8 0s5 2.342 5 5.188v5.625C13 13.658 10.78 16 8 16s-5-2.342-5-5.188V5.189zm4.5-4.155C5.541 1.289 4 3.035 4 5.188V5.5h3.5V1.033zm1 0V5.5H12v-.313c0-2.152-1.541-3.898-3.5-4.154zM12 6.5H4v4.313C4 13.145 5.81 15 8 15s4-1.855 4-4.188V6.5z"/>
-            </svg> In die Karte klicken</p>      
+            </svg> In die Karte klicken.</p>      
             </div>
         </div>
         <div class="row howto">
@@ -325,10 +327,26 @@ var places = <?php echo json_encode( $arr ) ?>;
         </div>
         <div class="row howto">
             <div class="col-sm-6">
+            <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+            </svg> Bild anhängen. (optional)</p>  
+            </div>
+        </div>
+        <div class="row howto">
+            <div class="col-sm-6">
+            <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path fill-rule="evenodd" d="M4.646 8.354a.5.5 0 0 0 .708 0L8 5.707l2.646 2.647a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 0 0 0 .708z"/>
+                <path fill-rule="evenodd" d="M8 11.5a.5.5 0 0 0 .5-.5V6a.5.5 0 0 0-1 0v5a.5.5 0 0 0 .5.5z"/>
+            </svg> Beitrag senden.</p>  
+            </div>
+        </div>
+        <div class="row howto">
+            <div class="col-sm-6">
             <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                 <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
-            </svg> Bestätigungslink im Email anklicken</p>  
+            </svg> Bestätigungslink im Email anklicken.</p>  
             </div>
         </div>
     </div>
