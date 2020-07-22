@@ -52,6 +52,18 @@ require('myClasses\Vcoeoci.class.php');
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="jQuery/jquery-3.5.1.min.js"></script>
 
+    <!-- https://github.com/sciactive/pnotify/blob/master/README.md#getting-started -->
+    <link href="node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
+    <link href="node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
+    <script type="module">
+    import { alert, defaultModules } from 'node_modules/@pnotify/core/dist/PNotify.js';
+    import * as PNotifyMobile from 'node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
+
+    defaultModules.set(PNotifyMobile, {});
+
+    alert('Notice me, senpai!');
+    </script>
+
     <style>
     /* .circle {
         width: 52px;
@@ -232,7 +244,7 @@ var places = <?php echo json_encode( $arr ) ?>;
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation);
         marker.bindPopup('<h3>'+title+'</h3>'+
-                '<img src="' + filepath + '" alt="" height="189" width="189">'+
+                '<img src="' + filepath + '" alt="" height=auto width=250>'+
                 '<br><p>'+body+'</p>');
         
         markers.addLayer(marker);
@@ -266,7 +278,7 @@ var places = <?php echo json_encode( $arr ) ?>;
     };
 
 
-    mymap.on('click', function(e) {
+    mymap.on('dblclick', function(e) {
         //alert(e.latlng);
         
         //Marker
@@ -276,7 +288,7 @@ var places = <?php echo json_encode( $arr ) ?>;
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Tempo</option><option>Platzaufteilung</option><option>Gefahrenstelle</option><option>Sichtbarkeit</option><option>Barriere</option><option>Sonstiges...</option></select></div><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="102400"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submin">Eintrag bestätigen</button></div></div></form></div>'
+            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Tempo Kfz-Verkehr</option><option>zu wenig Platz (zu Fuß)</option><option>zu wenig Platz (Rad)</option><option>Gefahrenstelle</option><option>Rad-Abstellplatz fehlt</option><option>Sonstiges...</option></select></div><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submin">Eintrag bestätigen</button></div></div></form></div>'
         )
         .openOn(mymap);
 
@@ -294,6 +306,9 @@ var places = <?php echo json_encode( $arr ) ?>;
     function closeNav() {
     document.getElementById("formPanel").style.width = "0%";
     }
+
+    PNotify.defaultModules.set(PNotifyMobile, {});
+    PNotify.alert('Notice me!');
 
 </script>
 
@@ -314,7 +329,7 @@ var places = <?php echo json_encode( $arr ) ?>;
             <div class="col-sm-6">
             <p><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-mouse2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M3 5.188C3 2.341 5.22 0 8 0s5 2.342 5 5.188v5.625C13 13.658 10.78 16 8 16s-5-2.342-5-5.188V5.189zm4.5-4.155C5.541 1.289 4 3.035 4 5.188V5.5h3.5V1.033zm1 0V5.5H12v-.313c0-2.152-1.541-3.898-3.5-4.154zM12 6.5H4v4.313C4 13.145 5.81 15 8 15s4-1.855 4-4.188V6.5z"/>
-            </svg> In die Karte klicken.</p>      
+            </svg> Doppelklick in die Karte.</p>      
             </div>
         </div>
         <div class="row howto">

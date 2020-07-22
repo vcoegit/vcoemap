@@ -64,7 +64,7 @@ if(key_exists('notificationtype', $_POST) && strlen($_POST['notificationtype'])>
 
 if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
     $email = htmlentities($_POST['email']);
-    $hashed_email = hash('md4', 'Stringedingeding' . 'salt&pepper');
+    $hashed_email = hash('md4', $email . 'salt&pepper');
     $echo .= htmlentities($_POST['email']) . "<br />";
 }else{
     $echo .= 'no email' . '<br />';
@@ -82,24 +82,33 @@ if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
 /**
  * und dann gibt es noch den File-Upload...
  */
-$tmp_name = $_FILES["watchthispix"]["tmp_name"];
-$uploadfilename = $_FILES["watchthispix"]["name"];
-$saveddate = date("mdy-Hms");
-$newfilename = "uploads/".$saveddate."_".$uploadfilename;
-$uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).'/'.$newfilename;
 
-if (move_uploaded_file($tmp_name, $newfilename)):
-    $msg = "File uploaded";
-else:
-    $msg = "Sorry, couldn't upload your picture".$_FILES['file']['error'];
-    $formerrors = true;
-endif; //move uploaded file
+
+if(key_exists("watchthispix", $_FILES)){ 
+    $tmp_name = $_FILES["watchthispix"]["tmp_name"];
+    $uploadfilename = $_FILES["watchthispix"]["name"];
+    $saveddate = date("mdy-Hms");
+    $newfilename = "uploads/".$saveddate."_".$uploadfilename;
+    $uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).'/'.$newfilename;
+
+    if (move_uploaded_file($tmp_name, $newfilename)):
+        $msg = "File uploaded";
+    else:
+        $msg = "Sorry, couldn't upload your picture".$_FILES['file']['error'];
+        $formerrors = true;
+    endif; //move uploaded file
+}
+
+
+
 
 /**
  * Eingaben in Datenbank speichern!
  */
 $vcoe = New myClasses\Vcoeoci;
 $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl', '$notificationtype', '$hashed_email')"; 
+
+
 
 /**
  * Email erstellen...
