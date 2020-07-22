@@ -32,7 +32,8 @@ class Mailer{
                 ->setFrom(['christian.schaefer@vcoe.at' => 'VCÖ - Mobilität mit Zukunft'])
                 ->setTo($this->objEmail->get_To())
                 ->setSubject($this->objEmail->get_Subject())
-                ->setBody($this->objEmail->get_Body())
+                ->setBody($this->objEmail->get_BodyHTML(), 'text/html')
+                ->addPart($this->objEmail->get_BodyText(), 'text/plain')
             ;
             
             // echo $message->toString();

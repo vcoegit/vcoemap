@@ -6,7 +6,8 @@ class Mail{
     private $to; //email
     private $from; //email
     private $subject;
-    private $body;
+    private $bodyText;
+    private $bodyHTML;
     private $cc; //array?
     private $bcc; //array?
 
@@ -41,13 +42,23 @@ class Mail{
         return $this->subject;
     }
 
-    public function set_body(string $body) : Mail{
-        $this->body = $body;
+    public function set_bodyText(string $text) : Mail{
+        $this->bodyText = $text;
         return $this;
     }
 
-    public function get_body(){
-        return $this->body;
+
+    public function get_bodyText(){
+        return $this->bodyText;
+    }
+
+    public function set_bodyHTML(string $html) : Mail{
+        $this->bodyHTML = $html;
+        return $this;
+    }
+
+    public function get_bodyHTML(){
+        return $this->bodyHTML;
     }
 
     public function add_cc(string $cc) : Mail{
