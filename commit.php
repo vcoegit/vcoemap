@@ -94,7 +94,7 @@ if(key_exists("watchthispix", $_FILES)){
     if (move_uploaded_file($tmp_name, $newfilename)):
         $msg = "File uploaded";
     else:
-        $msg = "Sorry, couldn't upload your picture".$_FILES['file']['error'];
+        $msg = "Sorry, couldn't upload your picture".$_FILES['watchthispix']['error'];
         $formerrors = true;
     endif; //move uploaded file
 }
@@ -109,7 +109,6 @@ $vcoe = New myClasses\Vcoeoci;
 $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl', '$notificationtype', '$hashed_email')"; 
 
 
-
 /**
  * Email erstellen...
  */
@@ -119,16 +118,31 @@ $objMailTemplate = New myClasses\MailTemplate($email, $hashed_email);
  * Email-Bestätigungs-Email versenden...
  */         
 $objMailer = New myClasses\Mailer($objMailTemplate);
-if($objMailer->sendConfirmationMail() > 0){
-    // var_dump('yepp!');
-    //nur dann, wenn das email erfolgreich versandt wurde, wird Eintrag gespeichert...
-    if($vcoe->execute($query)>0){
-    // echo "Ihr Beitrag wurde gespeichert!";
-    header("Location: index.php");
-    die();
-};
+//wenn email schon einmal bestätigt wurde, dann muss nicht nocheinmal Bestätigungslink vers. werden...
+if($objMailer->objEmail->hasEntries() == false){
+    if($objMailer->sendConfirmationMail() > 0){
+        // var_dump('yepp!');
+        //nur dann, wenn das email erfolgreich versandt wurde, wird Eintrag gespeichert...
+        if($vcoe->execute($query)>0){
+            // echo "Ihr Beitrag wurde gespeichert. Wir haben Ihnen ein Email auf die angegebene Adresse geschickt.";
+            header("Location: index.php");
+            die();
+        };
+    };
 }else{
-    var_dump('nope!');
+    //Zunächst trotzdem Eintrag speichern!
+    $vcoe->execute($query);
+    //statt ein Email zu verschicken, sollte an dieser Stelle der Eintrag gleich
+    //freigeschalten werden (weil unter der Email-Adresse schon was veröffentlicht wurde!)
+    if($objMailer->objEmail->publish() == true){
+            // echo "Ihr Beitrag wurde veröffentlicht!";
+                header("Location: index.php");
+                die();     
+    }else{
+            header("Location: index.php");
+            die();   
+    };
 };
+
 
 ?>

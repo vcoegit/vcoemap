@@ -1,6 +1,8 @@
 <?php 
 namespace myClasses;
 
+include_once 'myClasses\Vcoeoci.class.php'; 
+
 class Mail{
 
     private $to; //email
@@ -10,6 +12,8 @@ class Mail{
     private $bodyHTML;
     private $cc; //array?
     private $bcc; //array?
+    private $strSQL; 
+    private $strSQL2;
 
     public function __construct(){
 
@@ -77,6 +81,36 @@ class Mail{
 
     public function remove_bcc(){
         //CODE HERE
+    }
+
+    /**
+     * Prüft ob es zur jew. to-Adresse schon Datenbankeinträge gibt...
+     *
+     * @return boolean
+     */
+    public function hasEntries() : bool{
+
+    $vcoe = New \myClasses\Vcoeoci;
+
+    //gibt es bereits freigeschaltete Einträge?
+    $this->strSQL = "SELECT * from entries where email = '" . $this->get_to() . "' and marked_del = 0";
+        if(count($vcoe->ArrayFromDB($this->strSQL))>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //Eintrag wird / Einträge werden veröffentlicht! (alle die zu dieser Email gehören!)
+    public function publish() : bool{
+
+    $vcoe = New \myClasses\Vcoeoci;
+
+    $this->strSQL2 = "update entries set marked_del = 0 where email = '" . $this->get_to() . "'";
+
+        $vcoe->execute($this->strSQL2);
+        return true;
+        
     }
 
 };

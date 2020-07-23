@@ -278,9 +278,12 @@ var places = <?php echo json_encode( $arr ) ?>;
     };
 
 
+    //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
+    mymap.doubleClickZoom.disable();
+
     mymap.on('dblclick', function(e) {
         //alert(e.latlng);
-        
+
         //Marker
         L.marker(e.latlng).addTo(mymap);
         

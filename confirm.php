@@ -12,7 +12,7 @@ if(key_exists('hsh', $_GET) and strlen($_GET['hsh']) == 32){
 };
 
 //Es sollte genau ein Eintrag abgefragt worden sein mit dem entspr. hash...
-if(count($arrRecs)>1){
+if(count($arrRecs)>0){
 
     $strsql2 = "Update entries set marked_del = 0 where hashed_email = '" . htmlentities($_GET['hsh']) . "'";
     $vcoe = New myClasses\Vcoeoci;
