@@ -53,15 +53,12 @@ require('myClasses\Vcoeoci.class.php');
     <script src="jQuery/jquery-3.5.1.min.js"></script>
 
     <!-- https://github.com/sciactive/pnotify/blob/master/README.md#getting-started -->
-    <link href="node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
-    <link href="node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
-    <script type="module">
-    import { alert, defaultModules } from 'node_modules/@pnotify/core/dist/PNotify.js';
-    import * as PNotifyMobile from 'node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
-
-    defaultModules.set(PNotifyMobile, {});
-
-    alert('Notice me, senpai!');
+    <script type="text/javascript" src="node_modules/@pnotify/core/dist/PNotify.js"></script>
+        <link href="node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="node_modules/@pnotify/mobile/dist/PNotifyMobile.js"></script>
+        <link href="node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript">
+        PNotify.defaultModules.set(PNotifyMobile, {});
     </script>
 
     <style>
@@ -281,6 +278,11 @@ var places = <?php echo json_encode( $arr ) ?>;
     //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
     mymap.doubleClickZoom.disable();
 
+    mymap.on('click', function(e){
+        //alert('Notice me, senpai!');
+        PNotify.alert('Now that is a nice style for a notification!');
+    });
+
     mymap.on('dblclick', function(e) {
         //alert(e.latlng);
 
@@ -310,8 +312,7 @@ var places = <?php echo json_encode( $arr ) ?>;
     document.getElementById("formPanel").style.width = "0%";
     }
 
-    PNotify.defaultModules.set(PNotifyMobile, {});
-    PNotify.alert('Notice me!');
+
 
 </script>
 
