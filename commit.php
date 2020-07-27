@@ -8,6 +8,7 @@
  include_once('myClasses\MailTemplate.class.php');
  include_once('myClasses\Mail.class.php');
  include_once('myClasses\Mailer.class.php');
+ include_once('myClasses\Entry.class.php');
 
 /**
  * Stimmmt das csrf-Token?
@@ -31,52 +32,42 @@ if(key_exists('zoom', $_POST) && $_POST['zoom'] > 0){
     $_SESSION['zoom'] = $_POST['zoom'];
     // $zoom = $_POST['zoom'];
 }
-   
-$echo = '';
-$title = '';
-$body = '';
-$email = '';
-$lat = 0;
-$lng = 0;
 
-/**User-Input is guily unless the opposite is proven... */
+$objEntry = New myClasses\Entry;
+
+/**User-Input is guilty unless the opposite is proven... */
 
 if(key_exists('title', $_POST) && strlen($_POST['title'])>0){
-    $title = htmlentities($_POST['title']);
-    $echo .= htmlentities($_POST['title']) . '<br />';
+    $objEntry->set_title(htmlentities($_POST['title']));
 }else{
-    $echo .= 'no title' . '<br />';
+    $objEntry->set_title('');
 }
 
 if(key_exists('body', $_POST) && strlen($_POST['body'])>0){
-    $body = htmlentities($_POST['body']);
-    $echo .= htmlentities($_POST['body']) . "<br />";
+    $objEntry->set_description(htmlentities($_POST['body']));
 }else{
-    $echo .= 'no body' . '<br />';
+    $objEntry->set_description('');
 }
 
 if(key_exists('notificationtype', $_POST) && strlen($_POST['notificationtype'])>0){
-    $notificationtype = htmlentities($_POST['notificationtype']);
-    $echo .= htmlentities($_POST['notificationtype']) . "<br />";
+    $objEntry->set_type(htmlentities($_POST['notificationtype']));
 }else{
-    $echo .= 'no body' . '<br />';
+    $objEntry->set_type();
 }
 
 if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
-    $email = htmlentities($_POST['email']);
-    $hashed_email = hash('md4', $email . 'salt&pepper');
-    $echo .= htmlentities($_POST['email']) . "<br />";
+    $objEntry->set_email(htmlentities($_POST['email']));
+    
 }else{
-    $echo .= 'no email' . '<br />';
-    $hashed_email = '';
+    $objEntry->set_email('');
 }
 
 if(key_exists('lat', $_POST) && $_POST['lat'] > 0){
-    $lat = $_POST['lat'];
+    $objEntry->set_lat($_POST['lat']);
 }
 
 if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
-    $lng = $_POST['lng'];
+    $objEntry->set_lng($_POST['lng']);
 }
 
 /**
@@ -91,6 +82,9 @@ if(key_exists("watchthispix", $_FILES)){
     $newfilename = "uploads/".$saveddate."_".$uploadfilename;
     $uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).'/'.$newfilename;
 
+    //Entry-Objekt soll uploadUrl auch kennen...
+    $objEntry->set_uploadUrl($uploadurl);
+
     if (move_uploaded_file($tmp_name, $newfilename)):
         $msg = "File uploaded";
     else:
@@ -100,19 +94,10 @@ if(key_exists("watchthispix", $_FILES)){
 }
 
 
-
-
-/**
- * Eingaben in Datenbank speichern!
- */
-$vcoe = New myClasses\Vcoeoci;
-$query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email) values ('$title', '$body', '$lng', '$lat', 'EPSG:3857', '$email', '$uploadurl', '$notificationtype', '$hashed_email')"; 
-
-
 /**
  * Email erstellen...
  */
-$objMailTemplate = New myClasses\MailTemplate($email, $hashed_email);
+$objMailTemplate = New myClasses\MailTemplate($objEntry);
 
 /**
  * Email-Bestätigungs-Email versenden...
@@ -121,21 +106,28 @@ $objMailer = New myClasses\Mailer($objMailTemplate);
 //wenn email schon einmal bestätigt wurde, dann muss nicht nocheinmal Bestätigungslink vers. werden...
 if($objMailer->objEmail->hasEntries() == false){
     if($objMailer->sendConfirmationMail() > 0){
-        // var_dump('yepp!');
         //nur dann, wenn das email erfolgreich versandt wurde, wird Eintrag gespeichert...
-        if($vcoe->execute($query)>0){
+        if($objEntry->save() == true){
             // echo "Ihr Beitrag wurde gespeichert. Wir haben Ihnen ein Email auf die angegebene Adresse geschickt.";
+            $_SESSION['notification'] = "Wir haben Ihnen ein Email geschickt. Bitte bestätigen Sie ihre Email-Adresse indem Sie auf den darin enthaltenen Link klicken, damit wir ihren Beitrag freischalten können.";
+            //VCÖ über den Eintrag informieren...
+            $objMailer->sendInfoMailToVcoe($objEntry);
+
             header("Location: index.php");
             die();
         };
     };
 }else{
     //Zunächst trotzdem Eintrag speichern!
-    $vcoe->execute($query);
+    $objEntry->save();
     //statt ein Email zu verschicken, sollte an dieser Stelle der Eintrag gleich
     //freigeschalten werden (weil unter der Email-Adresse schon was veröffentlicht wurde!)
     if($objMailer->objEmail->publish() == true){
-            // echo "Ihr Beitrag wurde veröffentlicht!";
+
+                $_SESSION['notification'] = "Ihr Eintrag wurde veröffentlicht!";
+                //VCÖ über den Eintrag informieren...
+                $objMailer->sendInfoMailToVcoe($objEntry);
+
                 header("Location: index.php");
                 die();     
     }else{
@@ -143,6 +135,5 @@ if($objMailer->objEmail->hasEntries() == false){
             die();   
     };
 };
-
 
 ?>
