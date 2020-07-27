@@ -56,11 +56,11 @@ require('myClasses\Vcoeoci.class.php');
     <script type="text/javascript" src="node_modules/@pnotify/core/dist/PNotify.js"></script>
         <link href="node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="node_modules/@pnotify/mobile/dist/PNotifyMobile.js"></script>
+        <link href="node_modules/@pnotify/core/dist/BrightTheme.css" rel="stylesheet" type="text/css" />
         <link href="node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript">
+    <script type="text/javascript">
         PNotify.defaultModules.set(PNotifyMobile, {});
     </script>
-
 
     <script>
         function notifyUser(message) {
