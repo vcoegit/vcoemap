@@ -1,4 +1,5 @@
 <?php
+session_start();
 // echo '<p>TEST CONFIRM</p>';
 
 include_once('myClasses\Vcoeoci.class.php'); 
