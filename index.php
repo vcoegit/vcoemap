@@ -64,11 +64,41 @@ require('myClasses\Vcoeoci.class.php');
 
     <script>
         function notifyUser(message) {
+
                     PNotify.alert({
                         title: "Nachricht:",
                         text: message
                     });
         };
+
+        function showStackBottomRight(message, type) {
+            if (typeof window.stackBottomRight === 'undefined') {
+                window.stackBottomRight = new PNotify.Stack({
+                dir1: 'up',
+                dir2: 'left',
+                firstpos1: 25,
+                firstpos2: 25
+                });
+            }
+            const opts = {
+                title: "Nachricht",
+                text: message,
+                stack: window.stackBottomRight
+            };
+            switch (type) {
+                case 'error':
+                opts.type = 'error';
+                break;
+                case 'info':
+                opts.type = 'info';
+                break;
+                case 'success':
+                opts.type = 'success';
+                break;
+            }
+            PNotify.alert(opts);
+        }
+
     </script>
 
     <?php 
@@ -79,7 +109,7 @@ require('myClasses\Vcoeoci.class.php');
         echo "    
         <script>
             $(document).ready(function(e) {
-                notifyUser('$message');
+                showStackBottomRight('$message', 'success');
             });
         </script>";
     }
@@ -179,7 +209,13 @@ require('myClasses\Vcoeoci.class.php');
 </head>
 <body>
     
-    <div id="logodiv"><img id="logo" src="images/vcoe_logo_rotated_left.jpg" alt="VCÖ-Logo"></div>
+    <!-- <div id="logodiv"><img id="logo" src="images/vcoe_logo_rotated_left.jpg" alt="VCÖ-Logo"></div> -->
+
+    <div id="logodiv">
+        <a href="https://www.vcoe.at">
+            <img id="svg" src="lowgo.jpg" alt="VCÖ-Logo" srcset="images/svglogo.svg">
+        </a>
+    </div>
 
     <div id="mapid" class="mapid"></div>
 
