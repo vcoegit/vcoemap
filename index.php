@@ -73,7 +73,7 @@ require('myClasses\Vcoeoci.class.php');
 
     <?php 
     
-    $message =  $_SESSION['notification'] ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
+    $message =  isset($_SESSION['notification']) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
 
     if(strlen($message)>3){
         echo "    
@@ -128,10 +128,9 @@ require('myClasses\Vcoeoci.class.php');
     top: 0;
     left: 0;
     background-color: #3188b6;
-    background-color: #3188b6;
     overflow-x: hidden;
     transition: 0.5s;
-    z-index: 9;
+    z-index: 40;
     opacity: 0.9;
     }
 
@@ -179,6 +178,8 @@ require('myClasses\Vcoeoci.class.php');
 
 </head>
 <body>
+    
+    <div id="logodiv"><img id="logo" src="images/vcoe_logo_rotated_left.jpg" alt="VCÖ-Logo"></div>
 
     <div id="mapid" class="mapid"></div>
 
@@ -282,24 +283,24 @@ var places = <?php echo json_encode( $arr ) ?>;
     mymap.addLayer(markers);
     // mymap.addLayer(markerGroup);
 
-    var baseMaps = {
-        "Grayscale": grayscale,
-        "Streets": streets
-    };  
+    // var baseMaps = {
+    //     "Grayscale": grayscale,
+    //     "Streets": streets
+    // };  
 
-    var overlayMaps = {
-        "MarkerGroup": markerGroup,
-        "MarkerCluster": markers
-    };
+    // var overlayMaps = {
+    //     "MarkerGroup": markerGroup,
+    //     "MarkerCluster": markers
+    // };
 
 
-    L.control.layers(baseMaps, overlayMaps).addTo(mymap);
+    // L.control.layers(baseMaps, overlayMaps).addTo(mymap);
 
-    var baseMaps = {
-    "<span style='color: gray'>Grayscale</span>": grayscale,
-    "Streets": streets,
-    "MarkerGroup": markerGroup
-    };
+    // var baseMaps = {
+    // "<span style='color: gray'>Grayscale</span>": grayscale,
+    // "Streets": streets,
+    // "MarkerGroup": markerGroup
+    // };
 
 
     //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
