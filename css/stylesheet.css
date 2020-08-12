@@ -40,21 +40,25 @@
 
 
 h1, h2{
-    color: #f1fff1;
+    color: #FFFFFF;
 }
 
-.row.howto{
-    background-color: #3188b6;
-    color: whitesmoke;
+.row.howto {
+    background-color: #FFFFFF;
+    color: #3188b6;
+}
+
+.row.howto path{
+    fill: #3188b6;
 }
 
 .bi{
-    color: #f1fff1;
+    color: #FFFFFF;
     height: 100%;
 }
 
 .overlay p{
-    font-size: 30px;
+    font-size: 24px;
 }
 
 .infobtn{

@@ -261,7 +261,8 @@ class Vcoeoci{
                 $row['lon'], 
                 $row['title'],
                 $row['body'],
-                $row['filepath']
+                $row['filepath'],
+                $row['notification_type']
             ];
 
         $arr[] = $marker;

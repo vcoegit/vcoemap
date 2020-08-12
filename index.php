@@ -61,14 +61,24 @@ require('myClasses\Vcoeoci.class.php');
     <script type="text/javascript">
         PNotify.defaultModules.set(PNotifyMobile, {});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 
     <script>
         function notifyUser(message) {
 
-                    PNotify.alert({
-                        title: "Nachricht:",
-                        text: message
-                    });
+                    // PNotify.alert({
+                    //     title: "Nachricht:",
+                    //     text: message
+                    // });
+
+                    Swal.fire(
+                        'The Internet?',
+                        message,
+                        'question'
+                    )
+
+
         };
 
         function showStackBottomRight(message, type) {
@@ -85,6 +95,7 @@ require('myClasses\Vcoeoci.class.php');
                 text: message,
                 stack: window.stackBottomRight
             };
+
             switch (type) {
                 case 'error':
                 opts.type = 'error';
@@ -103,13 +114,19 @@ require('myClasses\Vcoeoci.class.php');
 
     <?php 
     
-    $message =  isset($_SESSION['notification']) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
+    $message =  key_exists('notification', $_SESSION) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
+
+    $alertType = key_exists('notification', $_SESSION) ? 'success' : 'info';
 
     if(strlen($message)>3){
         echo "    
         <script>
             $(document).ready(function(e) {
-                showStackBottomRight('$message', 'success');
+                Swal.fire({
+                position: 'top-end',
+                text: '" . $message . "',
+                icon: '" . $alertType . "'
+                })
             });
         </script>";
     }
@@ -119,15 +136,6 @@ require('myClasses\Vcoeoci.class.php');
     ?>
 
     <style>
-    /* .circle {
-        width: 52px;
-        height: 52px;
-        line-height: 55px;
-        background-image: url('circle6.gif');
-        text-align: center;
-        font-size: 16px;
-        font-weight: bold;
-    } */
 
     .mask {
         position: absolute;
@@ -148,34 +156,37 @@ require('myClasses\Vcoeoci.class.php');
     }
 
     body {
-    font-family: verdana,arial,sans-serif;
+        font-family: verdana,arial,sans-serif;
     }
 
     .overlay {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #3188b6;
-    overflow-x: hidden;
-    transition: 0.5s;
-    z-index: 40;
-    opacity: 0.9;
+        height: 100%;
+        width: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        color: #3188b6;
+        background-color: #FFFFFF;
+        overflow-x: hidden;
+        transition: 0.5s;
+        z-index: 40;
+        opacity: 0.9;
     }
 
     .overlay-content {
-    position: relative;
-    top: 25%;
-    width: 100%;
-    text-align: left;
-    margin-top: 30px;
-    }
+        position: relative;
+        top: 25%;
+        width: 100%;
+        text-align: left;
+        margin-top: 30px;
+        color: #3188b6;
+        background-color: #FFFFFF;
+        }
 
-    .overlay a, .overlay h1, .overlay h2, .overlay h3, .overlay p, .overlay li {
-    text-decoration: none;
-    color: #f1fff1;
-    transition: 0.3s;
+        .overlay a, .overlay h1, .overlay h2, .overlay h3, .overlay p, .overlay li {
+        text-decoration: none;
+        color: #3188b6;
+        transition: 0.3s;
     }
 
     .overlay li{
@@ -183,22 +194,24 @@ require('myClasses\Vcoeoci.class.php');
     }
 
     .overlay a:hover, .overlay a:focus {
-    color: #f1f1f1;
+        color: #3188b6;
     }
 
     .overlay .closebtn {
-    position: absolute;
-    top: 20px;
-    right: 45px;
-    font-size: 60px;
+        position: absolute;
+        top: 20px;
+        right: 45px;
+        color: #3188b6;
+        font-size: 30px;
+
     }
 
     @media screen and (max-height: 450px) {
-    .overlay a {font-size: 20px}
-    .overlay .closebtn {
-    font-size: 40px;
-    top: 15px;
-    right: 35px;
+        .overlay a {font-size: 20px}
+        .overlay .closebtn {
+        font-size: 40px;
+        top: 15px;
+        right: 35px;
     }
     }
 
@@ -301,12 +314,15 @@ var places = <?php echo json_encode( $arr ) ?>;
         var title = places[i][2];
         var body = places[i][3];
         var filepath = places[i][4];
+        var notificationtype = places[i][5];
         
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation);
         marker.bindPopup('<h4>'+title+'</h4>'+
                 '<img src="' + filepath + '" alt="" height=auto width=250>'+
-                '<br><p>'+body+'</p>');
+                '<br><p>'+body+'</p>'+
+                '<br><p>('+notificationtype+')</p>'
+                );
         
         markers.addLayer(marker);
 
