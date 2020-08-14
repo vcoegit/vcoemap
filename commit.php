@@ -75,7 +75,7 @@ if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
  */
 
 
-if(key_exists("watchthispix", $_FILES)){ 
+if(key_exists("watchthispix", $_FILES) && strlen($_FILES["watchthispix"]["name"]) > 0){ 
     $tmp_name = $_FILES["watchthispix"]["tmp_name"];
     $uploadfilename = $_FILES["watchthispix"]["name"];
     $saveddate = date("mdy-Hms");

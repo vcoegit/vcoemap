@@ -223,7 +223,12 @@ HEREDOC;
                 ->setSubject('Neuer Eintag in VCOE-Kartentool - please check!');
 
                 $logo = $message->embed((new \Swift_Image())->fromPath('images/vcoe_logo_newsletter.png'));
-                $image = $message->embed((new \Swift_Image())->fromPath($uploadurl));
+                
+                if(strlen($uploadurl) > 0){
+                    $image = $message->embed((new \Swift_Image())->fromPath($uploadurl));
+                }else{
+                    $image = $message->embed((new \Swift_Image())->fromPath('images/vcoe_logo_newsletter.png'));
+                }
 
                 $html = <<<HEREDOC
                 <!DOCTYPE HTML><html lang="de"><head>
