@@ -226,10 +226,11 @@ require('myClasses\Vcoeoci.class.php');
                 
                 <section class="collapse navbar-collapse" id="myTogglerNav">
                     <div class="navbar-nav ml-auto">
-                        <a class="nav-item nav-link" href="#page-hero">über dieses tool</a>
-                        <a class="nav-item nav-link" href="#page-multicolumn">technische Hilfe</a>
+                        <a class="nav-item nav-link" href="#page-hero">karte</a>
+                        <a class="nav-item nav-link" href="#page-hero">about</a>
+                        <a class="nav-item nav-link" href="hilfe.php">hilfe</a>
                         <a class="nav-item nav-link" href="#page-media">über den Vcö</a>
-                        <a class="nav-item nav-link" href="#page-hero">vcö-website</a>
+                        <a class="nav-item nav-link" href="http://www.vcoe.at">vcö-website</a>
                         <a class="nav-item nav-link" href="#page-photogrid">Spenden</a>
                         <a class="nav-item nav-link" href="#page-carousel">Impressum</a>
                     </div>      
@@ -240,9 +241,9 @@ require('myClasses\Vcoeoci.class.php');
 
     <!-- <div id="logodiv"><img id="logo" src="images/vcoe_logo_rotated_left.jpg" alt="VCÖ-Logo"></div> -->
 
-    <div class="container-fluid">
-        <div id="mapid" class="mapid"></div>
-    </div>
+    
+    <div id="mapid" class="mapid"></div>
+
 
     <button type="button" class="btn btn-primary btn-sm infobtn" onclick="openNav()" id="slide-toggle">
         <svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -251,11 +252,7 @@ require('myClasses\Vcoeoci.class.php');
         </svg>
     </button>
 
-    <div class="container-fluid">
-        <div Id="page-carousel">
-            <p>Das ist ein einfacher Test</p>
-        </div>
-    </div>
+
 
 
 <?php
