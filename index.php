@@ -36,7 +36,6 @@ require('myClasses\Vcoeoci.class.php');
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
-    <link rel="stylesheet" href="css/stylesheet.css">
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
     integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
@@ -52,17 +51,10 @@ require('myClasses\Vcoeoci.class.php');
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="jQuery/jquery-3.5.1.min.js"></script>
 
-    <!-- https://github.com/sciactive/pnotify/blob/master/README.md#getting-started -->
-    <script type="text/javascript" src="node_modules/@pnotify/core/dist/PNotify.js"></script>
-        <link href="node_modules/@pnotify/core/dist/PNotify.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="node_modules/@pnotify/mobile/dist/PNotifyMobile.js"></script>
-        <link href="node_modules/@pnotify/core/dist/BrightTheme.css" rel="stylesheet" type="text/css" />
-        <link href="node_modules/@pnotify/mobile/dist/PNotifyMobile.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript">
-        PNotify.defaultModules.set(PNotifyMobile, {});
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <link rel="stylesheet" href="css/stylesheet.css">
 
+    <!-- sweet alert! -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
     <script>
         function notifyUser(message) {
@@ -221,22 +213,50 @@ require('myClasses\Vcoeoci.class.php');
 </head>
 <body>
     
+
+    <header id="page-hero" class="site-header">
+        <nav class="site-nav family-sans text-uppercase navbar navbar-expand-md bg-secondary navbar-dark">
+            <div class="container-fluid">
+            
+                
+                <a class="navbar-brand" href="http://www.vcoe.at"><img id="logo" src="images/svglogo.svg" alt="no image here"></a>
+                
+
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="#myTogglerNav" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span></button>
+                
+                <section class="collapse navbar-collapse" id="myTogglerNav">
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-item nav-link" href="#page-hero">über dieses tool</a>
+                        <a class="nav-item nav-link" href="#page-multicolumn">technische Hilfe</a>
+                        <a class="nav-item nav-link" href="#page-media">über den Vcö</a>
+                        <a class="nav-item nav-link" href="#page-hero">vcö-website</a>
+                        <a class="nav-item nav-link" href="#page-photogrid">Spenden</a>
+                        <a class="nav-item nav-link" href="#page-carousel">Impressum</a>
+                    </div>      
+                </section>  
+            </div>   
+        </nav>
+    </header>
+
     <!-- <div id="logodiv"><img id="logo" src="images/vcoe_logo_rotated_left.jpg" alt="VCÖ-Logo"></div> -->
 
-    <div id="logodiv">
-        <a href="https://www.vcoe.at">
-            <img id="svg" src="lowgo.jpg" alt="VCÖ-Logo" srcset="images/svglogo.svg">
-        </a>
+    <div class="container-fluid">
+        <div id="mapid" class="mapid"></div>
     </div>
 
-    <div id="mapid" class="mapid"></div>
-
     <button type="button" class="btn btn-primary btn-sm infobtn" onclick="openNav()" id="slide-toggle">
-    <svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
-        <circle cx="8" cy="4.5" r="1"/>
-    </svg>
+        <svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
+            <circle cx="8" cy="4.5" r="1"/>
+        </svg>
     </button>
+
+    <div class="container-fluid">
+        <div Id="page-carousel">
+            <p>Das ist ein einfacher Test</p>
+        </div>
+    </div>
+
 
 <?php
     $arr = [];
