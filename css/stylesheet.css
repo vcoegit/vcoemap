@@ -1,9 +1,9 @@
 
 .mapid { 
     width: 100%;
-    height: 100%-100px; 
+    height: 100%; 
     position: absolute;
-    top: 100px;
+    top: 70px;
     left: 0px;
     z-index: -5;
 }
@@ -51,20 +51,6 @@ h1, h2{
     fill: #3188b6;
 }
 
-.bi{
-    color: #FFFFFF;
-    height: 100%;
-}
-
-.overlay p{
-    font-size: 24px;
-}
-
-.infobtn{
-    height: 35px;
-    width: 35px;
-}
-
 .bg-secondary{
     background-color:  #0082b2 !important;
 }
@@ -79,5 +65,9 @@ h1, h2{
 
 .site-header{
     z-index: 50;
+}
+
+path{
+    fill: #0082b2;
 }
 

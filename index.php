@@ -51,6 +51,9 @@ require('myClasses\Vcoeoci.class.php');
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="jQuery/jquery-3.5.1.min.js"></script>
 
+    <!-- calvinmedcalf -->
+    <link rel="stylesheet" href="vendor/calvinmetcalf/gh-pages.css" />
+
     <link rel="stylesheet" href="css/stylesheet.css">
 
     <!-- sweet alert! -->
@@ -106,9 +109,43 @@ require('myClasses\Vcoeoci.class.php');
 
     <?php 
     
-    $message =  key_exists('notification', $_SESSION) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
+    // $message =  key_exists('notification', $_SESSION) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
 
-    $alertType = key_exists('notification', $_SESSION) ? 'success' : 'info';
+    $noticode = 1; //default
+    $message = '';
+
+    if(key_exists('noticode', $_GET)){
+        $noticode = $_GET['noticode'];
+        switch ($noticode) {
+            case 1:
+                $message = "Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.";
+                break;
+            case 2:
+                $message = "Wir haben Ihnen ein Email geschickt. Bitte bestätigen Sie ihre Email-Adresse indem Sie auf den darin enthaltenen Link klicken, damit wir ihren Beitrag freischalten können.";
+                break;
+            case 3:
+                $message = "Vielen Dank, Ihre Email-Adresse wurde bestätigt, Ihr Eintrag erscheint auf unserer Karte!";
+                break;
+            case 4:
+                $message = "Hier ist offenbar ein Fehler passiert! Wir konnten Sie leider nicht identifizieren.";
+                break;    
+            case 5:
+                $message = "Vielen Dank! Ihr Eintrag wurde veröffentlicht!";          
+            default:
+                $message = "Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.";
+
+        }
+    } 
+
+    if(in_array($noticode, array(1, 2))){
+        $alertType = 'info';
+    }elseif(in_array($noticode, array(3, 5))){
+        $alertType = 'success';
+    }elseif(in_array($noticode, array(4) )){
+        $alertType = 'error';
+    }else{
+        $alertType = 'info';
+    };
 
     if(strlen($message)>3){
         echo "    
@@ -219,14 +256,14 @@ require('myClasses\Vcoeoci.class.php');
             <div class="container-fluid">
             
                 
-                <a class="navbar-brand" href="http://www.vcoe.at"><img id="logo" src="images/svglogo.svg" alt="no image here"></a>
+                <a class="navbar-brand" href="http://www.vcoe.at"><img id="logo" alt="Brand" src="http://vcoenet.local/VCOE-Logo_ohneClaim_Invers.svg" style="max-height:45px;"></a>
                 
 
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="#myTogglerNav" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span></button>
                 
                 <section class="collapse navbar-collapse" id="myTogglerNav">
                     <div class="navbar-nav ml-auto">
-                        <a class="nav-item nav-link" href="#page-hero">karte</a>
+                        <a class="nav-item nav-link" href="/leaflet2020">karte</a>
                         <a class="nav-item nav-link" href="#page-hero">about</a>
                         <a class="nav-item nav-link" href="hilfe.php">hilfe</a>
                         <a class="nav-item nav-link" href="#page-media">über den Vcö</a>
@@ -238,22 +275,8 @@ require('myClasses\Vcoeoci.class.php');
             </div>   
         </nav>
     </header>
-
-    <!-- <div id="logodiv"><img id="logo" src="images/vcoe_logo_rotated_left.jpg" alt="VCÖ-Logo"></div> -->
-
     
     <div id="mapid" class="mapid"></div>
-
-
-    <button type="button" class="btn btn-primary btn-sm infobtn" onclick="openNav()" id="slide-toggle">
-        <svg width="30px" height="30px" viewBox="5 2 12 12" class="bi bi-info" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588z"/>
-            <circle cx="8" cy="4.5" r="1"/>
-        </svg>
-    </button>
-
-
-
 
 <?php
     $arr = [];
@@ -261,19 +284,18 @@ require('myClasses\Vcoeoci.class.php');
 
     $vcoe = New myClasses\Vcoeoci;
     $arr = $vcoe->ArrayFromDB($query);
-
-    //print("<pre>".print_r($arr,true)."</pre>");
-    // echo print_r($arr,true);
 ?>
 
+
+<!-- <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script> -->
+<script src="vendor/calvinmetcalf/catiline.js"></script>
+<script src="vendor/calvinmetcalf/leaflet.shpfile.js"></script>
 <script>
 
+    // how to access elements in multi-dimensional array in JavaScript
+    //alert( products[0][1] ); // Chocolate Cake
 
-
-// how to access elements in multi-dimensional array in JavaScript
-//alert( products[0][1] ); // Chocolate Cake
-
-var places = <?php echo json_encode( $arr ) ?>;
+    var places = <?php echo json_encode( $arr ) ?>;
 
 	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 	    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -332,8 +354,54 @@ var places = <?php echo json_encode( $arr ) ?>;
         var filepath = places[i][4];
         var notificationtype = places[i][5];
         
+        var iconurl;
+        var iconsize;
+
+        switch (notificationtype) {
+            case 'Gefahrenstelle Gehen':
+                iconurl = 'images/walking.svg';
+                iconsize = 32;
+                break;
+            case 'Gefahrenstelle Rad':
+                iconurl = 'images/biking.svg';
+                iconsize = 60;
+                break;
+            case 'zu hohes Tempo Kfz':
+                iconurl = 'images/car.svg';
+                iconsize = 24;
+                break;
+            case 'zu wenig Platz Gehen':
+                iconurl = 'images/walking.svg';
+                iconsize = 24;
+                break;
+            case 'zu wenig Platz Rad':
+                iconurl = 'images/biking.svg';
+                iconsize = 24;
+                break;
+            case 'Sonstiges':
+                iconurl = 'images/exclamation.svg';
+                iconsize = 24;
+                break;
+            default:
+                iconurl = 'images/walking.svg';
+                iconsize = 24;
+                break;
+        }
+
+
+        var iconOptions = {
+            iconUrl: iconurl,
+            iconSize: [32, 32]
+        }
+        
+        var customIcon = L.icon(iconOptions);
+
+        var markerOptions = {
+            icon: customIcon
+        }
+
         var markerLocation = new L.LatLng(lon, lat);
-        var marker = new L.Marker(markerLocation);
+        var marker = new L.Marker(markerLocation, markerOptions);
         marker.bindPopup('<h4>'+title+'</h4>'+
                 '<img src="' + filepath + '" alt="" height=auto width=250>'+
                 '<br><p>'+body+'</p>'+
@@ -342,27 +410,48 @@ var places = <?php echo json_encode( $arr ) ?>;
         
         markers.addLayer(marker);
 
-        // mymap.addLayer(marker);
-
         markerGroup.addLayer(marker);
 
     }
 
     mymap.addLayer(markers);
-    // mymap.addLayer(markerGroup);
 
-    // var baseMaps = {
-    //     "Grayscale": grayscale,
-    //     "Streets": streets
-    // };  
+    var shpfile = new L.Shapefile('VGD-Oesterreich_gen_250.zip', {
+        onEachFeature: function(feature, layer) {
+            if (feature.properties) {
+                layer.bindPopup(Object.keys(feature.properties).map(function(k) {
+                    return k + ": " + feature.properties[k];
+                }).join("<br />"), {
+                    maxHeight: 200
+                });
+            }
+        },
+        style: function (feature) {
+                return {fillColor: '#1D1061'};
+        }
+    });
+    shpfile.addTo(mymap);
+    shpfile.once("data:loaded", function() {
+        console.log("finished loaded shapefile");
+    });
 
-    // var overlayMaps = {
-    //     "MarkerGroup": markerGroup,
-    //     "MarkerCluster": markers
-    // };
+    mymap.addLayer(shpfile);
 
+    shpfile.setZIndex(50);
 
-    // L.control.layers(baseMaps, overlayMaps).addTo(mymap);
+    //mymap.addLayer(markerGroup);
+
+    var baseMaps = {
+        "Grayscale": grayscale,
+        "Streets": streets
+    };  
+
+    var overlayMaps = {
+        "MarkerCluster": markers,
+        "Dingsbums": shpfile
+    };
+
+    L.control.layers(baseMaps, overlayMaps).addTo(mymap);
 
     // var baseMaps = {
     // "<span style='color: gray'>Grayscale</span>": grayscale,
@@ -383,7 +472,7 @@ var places = <?php echo json_encode( $arr ) ?>;
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(
-            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Tempo Kfz-Verkehr</option><option>zu wenig Platz (zu Fuß)</option><option>zu wenig Platz (Rad)</option><option>Gefahrenstelle</option><option>Rad-Abstellplatz fehlt</option><option>Sonstiges...</option></select></div><input type="text" class="form-control" id="title" name="title" placeholder="Titel"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
+            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Gefahrenstelle Gehen</option><option>Gefahrenstelle Rad</option><option>zu hohes Tempo Kfz</option><option>zu wenig Platz Rad</option><option>zu wenig Platz Gehen</option><option>Sonstiges</option></select></div><input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
         )
         .openOn(mymap);
 

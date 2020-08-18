@@ -20,22 +20,19 @@ if(count($arrRecs)>0){
     $vcoe->execute($strsql2); 
 
     if($vcoe->execute($strsql2)>0){
-
-        $_SESSION['notification'] = "Vielen Dank, Ihre Email-Adresse wurde bestätigt, Ihr Eintrag erscheint auf unserer Karte!";
-
-        header("Location: index.php");
+        
+        //Success...
+        header("Location: index.php?noticode=3");
         die();
     }else{
-
-        $_SESSION['notification'] = "Vielen Dank, Ihre Email-Adresse wurde bestätigt, Ihr Eintrag erscheint auf unserer Karte!";
-
-        header("Location: index.php");
+        //Fehler...
+        header("Location: index.php?noticode=3");
         die();
     }
 
 }else{
-    $_SESSION['notification'] = 'Hier ist offenbar ein Fehler passiert! Wir konnten Sie nicht identifizieren.</p>';
-    header("Location: index.php");
+    //Fehler...
+    header("Location: index.php?noticode=4");
     die();   
 };
 

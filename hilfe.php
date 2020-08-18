@@ -29,6 +29,31 @@
 </head>
 <body>
     
+<header id="page-hero" class="site-header">
+        <nav class="site-nav family-sans text-uppercase navbar navbar-expand-md bg-secondary navbar-dark">
+            <div class="container-fluid">
+            
+                
+                <a class="navbar-brand" href="http://www.vcoe.at"><img id="logo" alt="Brand" src="http://vcoenet.local/VCOE-Logo_ohneClaim_Invers.svg" style="max-height:45px;"></a>
+                
+
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="#myTogglerNav" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span></button>
+                
+                <section class="collapse navbar-collapse" id="myTogglerNav">
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-item nav-link" href="/leaflet2020">karte</a>
+                        <a class="nav-item nav-link" href="#page-hero">about</a>
+                        <a class="nav-item nav-link" href="hilfe.php">hilfe</a>
+                        <a class="nav-item nav-link" href="#page-media">über den Vcö</a>
+                        <a class="nav-item nav-link" href="http://www.vcoe.at">vcö-website</a>
+                        <a class="nav-item nav-link" href="#page-photogrid">Spenden</a>
+                        <a class="nav-item nav-link" href="#page-carousel">Impressum</a>
+                    </div>      
+                </section>  
+            </div>   
+        </nav>
+    </header>
+
 <div class="hilfediv">
     <div class="container">
         <div class="row howto">

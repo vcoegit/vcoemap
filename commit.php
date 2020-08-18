@@ -37,8 +37,8 @@ $objEntry = New myClasses\Entry;
 
 /**User-Input is guilty unless the opposite is proven... */
 
-if(key_exists('title', $_POST) && strlen($_POST['title'])>0){
-    $objEntry->set_title(htmlentities($_POST['title']));
+if(key_exists('plz', $_POST) && strlen($_POST['plz'])>0){
+    $objEntry->set_title(htmlentities($_POST['plz']));
 }else{
     $objEntry->set_title('');
 }
@@ -93,7 +93,6 @@ if(key_exists("watchthispix", $_FILES) && strlen($_FILES["watchthispix"]["name"]
     endif; //move uploaded file
 }
 
-
 /**
  * Email erstellen...
  */
@@ -108,12 +107,11 @@ if($objMailer->objEmail->hasEntries() == false){
     if($objMailer->sendConfirmationMail() > 0){
         //nur dann, wenn das email erfolgreich versandt wurde, wird Eintrag gespeichert...
         if($objEntry->save() == true){
-            // echo "Ihr Beitrag wurde gespeichert. Wir haben Ihnen ein Email auf die angegebene Adresse geschickt.";
-            $_SESSION['notification'] = "Wir haben Ihnen ein Email geschickt. Bitte bestätigen Sie ihre Email-Adresse indem Sie auf den darin enthaltenen Link klicken, damit wir ihren Beitrag freischalten können.";
+
             //VCÖ über den Eintrag informieren...
             $objMailer->sendInfoMailToVcoe($objEntry);
 
-            header("Location: index.php");
+            header("Location: index.php?noticode=2");
             die();
         };
     };
@@ -124,14 +122,13 @@ if($objMailer->objEmail->hasEntries() == false){
     //freigeschalten werden (weil unter der Email-Adresse schon was veröffentlicht wurde!)
     if($objMailer->objEmail->publish() == true){
 
-                $_SESSION['notification'] = "Ihr Eintrag wurde veröffentlicht!";
                 //VCÖ über den Eintrag informieren...
                 $objMailer->sendInfoMailToVcoe($objEntry);
 
-                header("Location: index.php");
+                header("Location: index.php?noticode=5");
                 die();     
     }else{
-            header("Location: index.php");
+            header("Location: index.php?noticode=4");
             die();   
     };
 };

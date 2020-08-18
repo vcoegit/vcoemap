@@ -66,10 +66,10 @@ class Vcoeoci{
 
     Public Function execute(string $query) : int {
         
-        $insert = $this->conn->prepare($query);
-        $insert->execute();
+        $statement = $this->conn->prepare($query);
+        $statement->execute();
 
-        $recAffs = $insert->rowCount();
+        $recAffs = $statement->rowCount();
 
         return $recAffs;
 

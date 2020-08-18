@@ -8,6 +8,7 @@ class Entry{
     private $email;
     private $hashedEmail;
     private $title;
+    private $plz;
     private $description;
     private $type; //notification_type
     private $lat;
@@ -39,8 +40,21 @@ class Entry{
         return $this->email;
     }
 
+    public function get_title(){
+        return $this->title;
+    }
+
     public function set_title(string $title) : Entry {
         $this->title = $title;
+        return $this;
+    }
+
+    public function get_plz(){
+        return $this->plz;
+    }
+
+    public function set_plz(string $plz) : Entry {
+        $this->plz = $plz;
         return $this;
     }
 
@@ -53,10 +67,7 @@ class Entry{
         return $this->hashedEmail;
     }
 
-    public function get_title(){
-        return $this->title;
-    }
-
+    
     public function set_description(string $description) : Entry {
         $this->description = $description;
         return $this;
@@ -104,7 +115,7 @@ class Entry{
 
     public function save() : bool {
         $vcoe = New \myClasses\Vcoeoci;
-        $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "')"; 
+        $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email, plz) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "' , '"  . $this->get_plz() . "')"; 
 
         if($vcoe->execute($query)>0){
             return true;
