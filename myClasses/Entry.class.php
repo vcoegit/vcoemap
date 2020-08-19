@@ -5,6 +5,7 @@ include_once 'myClasses\Vcoeoci.class.php';
 
 class Entry{
 
+    private $entryid;
     private $email;
     private $hashedEmail;
     private $title;
@@ -22,8 +23,20 @@ class Entry{
 
     }
 
+    public function get_entryid(){
+        if(!$this->entryid){
+            return null;
+        }else{
+            return $this->entryid;
+        }
+    }
+
+    public function set_entryid(){
+
+    }
+
     private function set_linkDelete(){
-        $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/block.php?hsh=' . $this->get_hashedEmail();
+        $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/block.php?hsh=' . $this->get_hashedEmail() . '&entryid=' . $this->get_entryid();
     }
 
     public function get_linkDelete(){
@@ -118,8 +131,21 @@ class Entry{
         $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email, plz) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "' , '"  . $this->get_plz() . "')"; 
 
         if($vcoe->execute($query)>0){
+            // $this->entryid = SELECT LAST_INSERT_ID();
+
+            $vcoe = New \myClasses\Vcoeoci;
+            $strsql = "SELECT MAX(entryid) from entries";
+            $strsql = "SELECT LAST_INSERT_ID()";
+            
+            $entryid = $vcoe->scalarFromDB($strsql);
+            $this->entryid = $vcoe->ScalarFromDB($strsql);
+
+            //erst jetzt kann ich einen Lösch-Link erzeugen, da dieser die Entryid enthalten soll...
+            $this->set_linkDelete();
+
             return true;
         }else{
+
             return false;
         }
     }

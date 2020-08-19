@@ -205,6 +205,7 @@ HEREDOC;
 
         $uploadurl = $objEntry->get_uploadUrl();
         $email = $objEntry->get_email();
+        $plz = $objEntry->get_plz();
         $title = $objEntry->get_title();
         $description = $objEntry->get_description();
         $type = $objEntry->get_type();

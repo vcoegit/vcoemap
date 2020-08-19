@@ -5,11 +5,11 @@
 //Overlay inspired by:
 //https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp
 
-
 //Stw. CSRF
 session_start();
 
 $now = time();
+
 if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
     // this session has worn out its welcome; kill it and start a brand new one
     session_unset();
@@ -24,57 +24,11 @@ $_SESSION['csrf_token'] = uniqid('', true);
 
 require('myClasses\Vcoeoci.class.php');
 
+include("./includes/header.php");
+
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-
-    <!-- MarkerClusters... -->
-    <!-- https://unpkg.com/leaflet.markercluster@1.4.1/dist/ -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
-    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <script src="jQuery/jquery-3.5.1.min.js"></script>
-
-    <!-- calvinmedcalf -->
-    <link rel="stylesheet" href="vendor/calvinmetcalf/gh-pages.css" />
-
-    <link rel="stylesheet" href="css/stylesheet.css">
-
-    <!-- sweet alert! -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-
     <script>
-        function notifyUser(message) {
-
-                    // PNotify.alert({
-                    //     title: "Nachricht:",
-                    //     text: message
-                    // });
-
-                    Swal.fire(
-                        'The Internet?',
-                        message,
-                        'question'
-                    )
-
-
-        };
 
         function showStackBottomRight(message, type) {
             if (typeof window.stackBottomRight === 'undefined') {
@@ -124,13 +78,13 @@ require('myClasses\Vcoeoci.class.php');
                 $message = "Wir haben Ihnen ein Email geschickt. Bitte bestätigen Sie ihre Email-Adresse indem Sie auf den darin enthaltenen Link klicken, damit wir ihren Beitrag freischalten können.";
                 break;
             case 3:
-                $message = "Vielen Dank, Ihre Email-Adresse wurde bestätigt, Ihr Eintrag erscheint auf unserer Karte!";
+                $message = "Vielen Dank, Ihre Email-Adresse wurde bestätigt, Ihr Eintrag erscheint auf unserer Karte! Wir freuen uns über weitere Beiträge.";
                 break;
             case 4:
                 $message = "Hier ist offenbar ein Fehler passiert! Wir konnten Sie leider nicht identifizieren.";
                 break;    
             case 5:
-                $message = "Vielen Dank! Ihr Eintrag wurde veröffentlicht!";          
+                $message = "Vielen Dank! Ihr Eintrag wurde veröffentlicht! Wir freuen uns über weitere Beiträge.";          
             default:
                 $message = "Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.";
 
@@ -162,120 +116,17 @@ require('myClasses\Vcoeoci.class.php');
     $_SESSION['notification'] = '';
 
     ?>
-
-    <style>
-
-    .mask {
-        position: absolute;
-        top: -1px;                     /* minus half the div size */
-        left: -1px;                    /* minus half the div size */
-        width: 100px;                   /* the div size */
-        height: 100px;                  /* the div size */
-        background-color: rgb(256, 256, 256, 0.7); 
-        border-radius: 50px;   /*Stw.: rounded corners*/        
-        border: 2px solid #3188b6;       
-        pointer-events: none;           /* send mouse events beneath this layer */
-        text-align: center;
-        line-height: 49px;
-        font-size: 14px;
-        color: #3188b6;
-        font-weight: bold;
-        /* opacity:0.5 */
-    }
-
-    body {
-        font-family: verdana,arial,sans-serif;
-    }
-
-    .overlay {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        color: #3188b6;
-        background-color: #FFFFFF;
-        overflow-x: hidden;
-        transition: 0.5s;
-        z-index: 40;
-        opacity: 0.9;
-    }
-
-    .overlay-content {
-        position: relative;
-        top: 25%;
-        width: 100%;
-        text-align: left;
-        margin-top: 30px;
-        color: #3188b6;
-        background-color: #FFFFFF;
-        }
-
-        .overlay a, .overlay h1, .overlay h2, .overlay h3, .overlay p, .overlay li {
-        text-decoration: none;
-        color: #3188b6;
-        transition: 0.3s;
-    }
-
-    .overlay li{
-        font-size: 14px;
-    }
-
-    .overlay a:hover, .overlay a:focus {
-        color: #3188b6;
-    }
-
-    .overlay .closebtn {
-        position: absolute;
-        top: 20px;
-        right: 45px;
-        color: #3188b6;
-        font-size: 30px;
-
-    }
-
-    @media screen and (max-height: 450px) {
-        .overlay a {font-size: 20px}
-        .overlay .closebtn {
-        font-size: 40px;
-        top: 15px;
-        right: 35px;
-    }
-    }
-
-	</style>
     
     <title>vcoemap</title>
 
 </head>
+
 <body>
     
+<?php
+    include('./includes/navigation.php');
+?>
 
-    <header id="page-hero" class="site-header">
-        <nav class="site-nav family-sans text-uppercase navbar navbar-expand-md bg-secondary navbar-dark">
-            <div class="container-fluid">
-            
-                
-                <a class="navbar-brand" href="http://www.vcoe.at"><img id="logo" alt="Brand" src="http://vcoenet.local/VCOE-Logo_ohneClaim_Invers.svg" style="max-height:45px;"></a>
-                
-
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#myTogglerNav" aria-controls="#myTogglerNav" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span></button>
-                
-                <section class="collapse navbar-collapse" id="myTogglerNav">
-                    <div class="navbar-nav ml-auto">
-                        <a class="nav-item nav-link" href="/leaflet2020">karte</a>
-                        <a class="nav-item nav-link" href="#page-hero">about</a>
-                        <a class="nav-item nav-link" href="hilfe.php">hilfe</a>
-                        <a class="nav-item nav-link" href="#page-media">über den Vcö</a>
-                        <a class="nav-item nav-link" href="http://www.vcoe.at">vcö-website</a>
-                        <a class="nav-item nav-link" href="#page-photogrid">Spenden</a>
-                        <a class="nav-item nav-link" href="#page-carousel">Impressum</a>
-                    </div>      
-                </section>  
-            </div>   
-        </nav>
-    </header>
-    
     <div id="mapid" class="mapid"></div>
 
 <?php
@@ -359,39 +210,39 @@ require('myClasses\Vcoeoci.class.php');
 
         switch (notificationtype) {
             case 'Gefahrenstelle Gehen':
-                iconurl = 'images/walking.svg';
+                iconurl = 'images/walking_exclamation.svg';
                 iconsize = 32;
                 break;
             case 'Gefahrenstelle Rad':
-                iconurl = 'images/biking.svg';
-                iconsize = 60;
+                iconurl = 'images/biking_exclamation.svg';
+                iconsize = 32;
                 break;
             case 'zu hohes Tempo Kfz':
-                iconurl = 'images/car.svg';
-                iconsize = 24;
+                iconurl = 'images/car_fast.svg';
+                iconsize = 32;
                 break;
             case 'zu wenig Platz Gehen':
-                iconurl = 'images/walking.svg';
-                iconsize = 24;
+                iconurl = 'images/walking_narrow.svg';
+                iconsize = 40;
                 break;
             case 'zu wenig Platz Rad':
-                iconurl = 'images/biking.svg';
-                iconsize = 24;
+                iconurl = 'images/biking_narrow.svg';
+                iconsize = 32;
                 break;
             case 'Sonstiges':
                 iconurl = 'images/exclamation.svg';
-                iconsize = 24;
+                iconsize = 32;
                 break;
             default:
-                iconurl = 'images/walking.svg';
-                iconsize = 24;
+                iconurl = 'images/exclamation.svg';
+                iconsize = 32;
                 break;
         }
 
 
         var iconOptions = {
             iconUrl: iconurl,
-            iconSize: [32, 32]
+            iconSize: [iconsize, iconsize]
         }
         
         var customIcon = L.icon(iconOptions);
@@ -447,8 +298,7 @@ require('myClasses\Vcoeoci.class.php');
     };  
 
     var overlayMaps = {
-        "MarkerCluster": markers,
-        "Dingsbums": shpfile
+        "Karteneinträge": markers
     };
 
     L.control.layers(baseMaps, overlayMaps).addTo(mymap);

@@ -71,3 +71,83 @@ path{
     fill: #0082b2;
 }
 
+/* Das ist übersiedelt von der Index-Seite */
+
+.mask {
+    position: absolute;
+    top: -1px;                     /* minus half the div size */
+    left: -1px;                    /* minus half the div size */
+    width: 100px;                   /* the div size */
+    height: 100px;                  /* the div size */
+    background-color: rgb(256, 256, 256, 0.7); 
+    border-radius: 50px;   /*Stw.: rounded corners*/        
+    border: 2px solid #3188b6;       
+    pointer-events: none;           /* send mouse events beneath this layer */
+    text-align: center;
+    line-height: 49px;
+    font-size: 14px;
+    color: #3188b6;
+    font-weight: bold;
+    /* opacity:0.5 */
+}
+
+body {
+    font-family: verdana,arial,sans-serif;
+}
+
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #3188b6;
+    background-color: #FFFFFF;
+    overflow-x: hidden;
+    transition: 0.5s;
+    z-index: 40;
+    opacity: 0.9;
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: left;
+    margin-top: 30px;
+    color: #3188b6;
+    background-color: #FFFFFF;
+    }
+
+    .overlay a, .overlay h1, .overlay h2, .overlay h3, .overlay p, .overlay li {
+    text-decoration: none;
+    color: #3188b6;
+    transition: 0.3s;
+}
+
+.overlay li{
+    font-size: 14px;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #3188b6;
+}
+
+.overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    color: #3188b6;
+    font-size: 30px;
+
+}
+
+@media screen and (max-height: 450px) {
+    .overlay a {font-size: 20px}
+    .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+}
+}
+

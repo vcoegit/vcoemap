@@ -64,6 +64,18 @@ class Vcoeoci{
 
     }
 
+    Public Function ScalarFromDB(string $query) : int {
+
+        foreach ($this->conn->query($query) as $row) {
+        
+            $scalar = $row[0];
+
+        }
+
+        return $scalar;
+
+    }
+
     Public Function execute(string $query) : int {
         
         $statement = $this->conn->prepare($query);

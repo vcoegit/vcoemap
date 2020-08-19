@@ -15,7 +15,7 @@ if(key_exists('hsh', $_GET) and strlen($_GET['hsh']) == 32){
 //Es sollte genau ein Eintrag abgefragt worden sein mit dem entspr. hash...
 if(count($arrRecs)>0){
 
-    $strsql2 = "Update entries set marked_del = 1 where hashed_email = '" . htmlentities($_GET['hsh']) . "'";
+    $strsql2 = "Update entries set marked_del = 1 where hashed_email = '" . htmlentities($_GET['hsh']) . "' and entryid = " . htmlentities($_GET['entryid']);
     $vcoe = New myClasses\Vcoeoci;
     $vcoe->execute($strsql2); 
 
