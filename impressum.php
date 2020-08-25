@@ -45,6 +45,7 @@
 
             <a href="https://youtube.com/user/VCOEvideo"><img class="social" src="images/youtube.svg" alt="youtube"></a>
 
+            <a href="https://www.linkedin.com/company/vc%C3%B6-mobilit%C3%A4t-mit-zukunft"><img class="social" src="images/linkedin.svg" alt="linkedin"></a>
 
         </div>
 
