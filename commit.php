@@ -38,13 +38,13 @@ $objEntry = New myClasses\Entry;
 /**User-Input is guilty unless the opposite is proven... */
 
 if(key_exists('plz', $_POST) && strlen($_POST['plz'])>0){
-    $objEntry->set_title(htmlentities($_POST['plz']));
+    $objEntry->set_title(addslashes(htmlentities($_POST['plz'])));
 }else{
     $objEntry->set_title('');
 }
 
 if(key_exists('body', $_POST) && strlen($_POST['body'])>0){
-    $objEntry->set_description(htmlentities($_POST['body']));
+    $objEntry->set_description(addslashes(htmlentities($_POST['body'])));
 }else{
     $objEntry->set_description('');
 }
@@ -56,7 +56,7 @@ if(key_exists('notificationtype', $_POST) && strlen($_POST['notificationtype'])>
 }
 
 if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
-    $objEntry->set_email(htmlentities($_POST['email']));
+    $objEntry->set_email(addslashes(htmlentities($_POST['email'])));
     
 }else{
     $objEntry->set_email('');

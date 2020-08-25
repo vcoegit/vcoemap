@@ -14,9 +14,9 @@
                         <a class="nav-item nav-link" href="about.php">about</a>
                         <a class="nav-item nav-link" href="hilfe.php">hilfe</a>
                         <a class="nav-item nav-link" href="about_vcoe.php">über den Vcö</a>
-                        <a class="nav-item nav-link" href="http://www.vcoe.at">vcö-website</a>
-                        <a class="nav-item nav-link" href="">Spenden</a>
-                        <a class="nav-item nav-link" href="">Impressum</a>
+                        <a class="nav-item nav-link" href="https://www.vcoe.at">vcö-website</a>
+                        <a class="nav-item nav-link" href="https://www.vcoe.at/vcoe-unterstuetzen/spenden">Spenden</a>
+                        <a class="nav-item nav-link" href="impressum.php">Impressum</a>
                     </div>      
                 </section>  
             </div>  <!--Container--> 

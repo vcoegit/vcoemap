@@ -38,8 +38,24 @@
 }
 
 
-h1, h2{
-    color: #FFFFFF;
+h1, h2, h3, h4, h5{
+    color: #040404;
+}
+
+p{
+    color: #040404;  
+}
+
+a:link{
+    color: #3188b6;
+}
+
+a:visited{
+    color: #3188b6;
+}
+
+a:hover{
+    color: #3188b6;
 }
 
 .row.howto {
@@ -68,7 +84,7 @@ h1, h2{
 }
 
 path{
-    fill: #0082b2;
+    fill: #040404;
 }
 
 /* Das ist übersiedelt von der Index-Seite */
@@ -140,6 +156,11 @@ body {
     color: #3188b6;
     font-size: 30px;
 
+}
+
+.social{
+    height: 32px;
+    width: 32px
 }
 
 @media screen and (max-height: 450px) {

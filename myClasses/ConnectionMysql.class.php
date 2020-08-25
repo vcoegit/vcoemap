@@ -16,17 +16,11 @@ public static $instance = null;
  */
 protected function __construct(){
     
+    $configs = include('config.php');
 
-    // $dsn = 'mysql:dbname=testdb;host=127.0.0.1';
-    // $user = 'dbuser';
-    // $password = 'dbpass';
-    
-    // try {
-    //     $dbh = new PDO($dsn, $user, $password);
-
-    $dsn = 'mysql:dbname=leaflet2020;host=127.0.0.1';
-    $user = 'root';
-    $password = '';
+    $dsn = $configs['dsn'];
+    $user = $configs['user'];
+    $password = $configs['password'];
     
     try {
         // self::$conn = new PDO("mysql:host=$servername;dbname=$dbname; username=$username; password=$password");
