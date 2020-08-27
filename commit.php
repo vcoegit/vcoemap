@@ -38,9 +38,9 @@ $objEntry = New myClasses\Entry;
 /**User-Input is guilty unless the opposite is proven... */
 
 if(key_exists('plz', $_POST) && strlen($_POST['plz'])>0){
-    $objEntry->set_title(addslashes(htmlentities($_POST['plz'])));
+    $objEntry->set_plz(addslashes(htmlentities($_POST['plz'])));
 }else{
-    $objEntry->set_title('');
+    $objEntry->set_plz('');
 }
 
 if(key_exists('body', $_POST) && strlen($_POST['body'])>0){

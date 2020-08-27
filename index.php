@@ -66,7 +66,7 @@ include("./includes/header.php");
     // $message =  key_exists('notification', $_SESSION) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
 
     $noticode = 1; //default
-    $message = '';
+    $message = 'Auf dieser Website können Sie Problemstellen auf Ihren Wegen zu Fuß oder mit dem Fahrrad eintragen. Bitte klicken Sie auf der Karte auf die Straße, wo sie eine Problemstelle sehen. Nutzen Sie die entsprechende Kategorie und beschreiben Sie bitte kurz das Problem. Sie erhalten dann an die angegebene E-Mail Adresse einen Bestätigungslink. Nach der Bestätigung wird der Beitrag frei geschaltet. Sie können selbstverständlich mehrere Problemstellen eintragen. Danke!';
 
     if(key_exists('noticode', $_GET)){
         $noticode = $_GET['noticode'];
@@ -84,7 +84,8 @@ include("./includes/header.php");
                 $message = "Hier ist offenbar ein Fehler passiert! Wir konnten Sie leider nicht identifizieren.";
                 break;    
             case 5:
-                $message = "Vielen Dank! Ihr Eintrag wurde veröffentlicht! Wir freuen uns über weitere Beiträge.";          
+                $message = "Vielen Dank! Ihr Eintrag wurde veröffentlicht! Wir freuen uns über weitere Beiträge.";    
+                break;      
             default:
                 $message = "Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.";
 
@@ -92,13 +93,13 @@ include("./includes/header.php");
     } 
 
     if(in_array($noticode, array(1, 2))){
-        $alertType = 'info';
+        $alertType = '';
     }elseif(in_array($noticode, array(3, 5))){
         $alertType = 'success';
     }elseif(in_array($noticode, array(4) )){
         $alertType = 'error';
     }else{
-        $alertType = 'info';
+        $alertType = null;
     };
 
     if(strlen($message)>3){
@@ -182,6 +183,25 @@ include("./includes/header.php");
         zoom: <?= key_exists('zoom', $_SESSION) ? $_SESSION['zoom'] : 8; ?>,
         layers: [grayscale]
     });
+    
+    // betrifft die Legende...
+    var legend = L.control({position: 'bottomleft'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend');
+        div.innerHTML = '<div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:25px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstellt / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div>';
+
+        return div;
+    };
+
+    legend.addTo(mymap);
+
+
+    // mymap.setLayoutProperty('country-label', 'text-field', [
+    //     'get',
+    //     'name_de'
+    // ]);
 
     //Loop through the markers array
     //Alle Punkte aus dem Places-Array der Map bzw. MarkerGroup und dann der Map hinzufügen...
@@ -204,29 +224,30 @@ include("./includes/header.php");
         var body = places[i][3];
         var filepath = places[i][4];
         var notificationtype = places[i][5];
+        var plz = places[i][6];
         
         var iconurl;
         var iconsize;
 
         switch (notificationtype) {
             case 'Gefahrenstelle Gehen':
-                iconurl = 'images/walking_exclamation.svg';
+                iconurl = 'images/walking.svg';
                 iconsize = 32;
                 break;
             case 'Gefahrenstelle Rad':
-                iconurl = 'images/biking_exclamation.svg';
+                iconurl = 'images/biking.svg';
                 iconsize = 32;
                 break;
             case 'zu hohes Tempo Kfz':
-                iconurl = 'images/car_fast.svg';
+                iconurl = 'images/car.svg';
                 iconsize = 32;
                 break;
             case 'zu wenig Platz Gehen':
-                iconurl = 'images/walking_narrow.svg';
+                iconurl = 'images/walking.svg';
                 iconsize = 40;
                 break;
             case 'zu wenig Platz Rad':
-                iconurl = 'images/biking_narrow.svg';
+                iconurl = 'images/biking.svg';
                 iconsize = 32;
                 break;
             case 'Sonstiges':
@@ -253,10 +274,10 @@ include("./includes/header.php");
 
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation, markerOptions);
-        marker.bindPopup('<h4>'+title+'</h4>'+
+        marker.bindPopup('<h6>'+notificationtype+'</h6>'+
                 '<img src="' + filepath + '" alt="" height=auto width=250>'+
-                '<br><p>'+body+'</p>'+
-                '<br><p>('+notificationtype+')</p>'
+                '<p>'+body+'</p>'+
+                '<p>PLZ: '+plz+'</p>'
                 );
         
         markers.addLayer(marker);
@@ -267,28 +288,28 @@ include("./includes/header.php");
 
     mymap.addLayer(markers);
 
-    var shpfile = new L.Shapefile('VGD-Oesterreich_gen_250.zip', {
-        onEachFeature: function(feature, layer) {
-            if (feature.properties) {
-                layer.bindPopup(Object.keys(feature.properties).map(function(k) {
-                    return k + ": " + feature.properties[k];
-                }).join("<br />"), {
-                    maxHeight: 200
-                });
-            }
-        },
-        style: function (feature) {
-                return {fillColor: '#1D1061'};
-        }
-    });
-    shpfile.addTo(mymap);
-    shpfile.once("data:loaded", function() {
-        console.log("finished loaded shapefile");
-    });
+    // var shpfile = new L.Shapefile('VGD-Oesterreich_gen_250.zip', {
+    //     onEachFeature: function(feature, layer) {
+    //         if (feature.properties) {
+    //             layer.bindPopup(Object.keys(feature.properties).map(function(k) {
+    //                 return k + ": " + feature.properties[k];
+    //             }).join("<br />"), {
+    //                 maxHeight: 200
+    //             });
+    //         }
+    //     },
+    //     style: function (feature) {
+    //             return {fillColor: '#1D1061'};
+    //     }
+    // });
+    // shpfile.addTo(mymap);
+    // shpfile.once("data:loaded", function() {
+    //     console.log("finished loaded shapefile");
+    // });
 
-    mymap.addLayer(shpfile);
+    // mymap.addLayer(shpfile);
 
-    shpfile.setZIndex(50);
+    // shpfile.setZIndex(50);
 
     //mymap.addLayer(markerGroup);
 
@@ -313,20 +334,51 @@ include("./includes/header.php");
     //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
     mymap.doubleClickZoom.disable();
 
+    mymap.on('click', function(e){
+ 
+    });
+
     mymap.on('dblclick', function(e) {
 
+        //jedenfalls muss jetzt mal die Legende Weg...
+        mymap.removeControl(legend);
+
+        Swal.fire({
+            // title: 'Eintrag an dieser Stelle?',
+            text: "Wollen sie an dieser Stelle einen Karteneintrag machen?",
+            type: 'question',
+            showCancelButton: true,
+            // confirmButtonColor: '#3085d6',
+            // cancelButtonColor: '#d33',
+            confirmButtonText: 'Ja!',
+            cancelButtonText: 'Nein, abbrechen!'
+        }).then((result) => {
+        if (result.value) {
+            setEntry(e.latlng)
+            // Swal.fire(
+            // 'Deleted!',
+            // 'Your file has been deleted.',
+            // 'success'
+            // )
+            }
+        })
+
+    });
+
+    function setEntry(latlng){
+
         //Marker
-        L.marker(e.latlng).addTo(mymap);
-        
+        //L.marker(latlng).addTo(mymap);
+
         //Popup
         var popup = L.popup()
-        .setLatLng(e.latlng)
+        .setLatLng(latlng)
         .setContent(
-            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + e.latlng.lat + '"><input type="hidden" name="lng" value="' + e.latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Gefahrenstelle Gehen</option><option>Gefahrenstelle Rad</option><option>zu hohes Tempo Kfz</option><option>zu wenig Platz Rad</option><option>zu wenig Platz Gehen</option><option>Sonstiges</option></select></div><input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
+            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + latlng.lat + '"><input type="hidden" name="lng" value="' + latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Gefahrenstelle Gehen</option><option>Gefahrenstelle Rad</option><option>zu hohes Tempo Kfz</option><option>zu wenig Platz Rad</option><option>zu wenig Platz Gehen</option><option>Sonstiges</option></select></div><input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
         )
         .openOn(mymap);
 
-    });
+    }
 
     function openNav() {
     document.getElementById("formPanel").style.width = "100%";

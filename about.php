@@ -23,15 +23,17 @@
         </div>
 
         <div class="col-md-8">
-            <p>Der VCÖ setzt sich als gemeinwohlorientierte Organisation seit  mehr als 30 Jahren für eine faire und umweltverträgliche Mobilität ein.</p>
+            <p>Gefahrenstellen, zu schmale Gehsteige, fehlende Radwege oder zu hohes Tempo des Kfz-Verkehrs erschweren es, Alltagswege häufiger gesund und klimaverträglich zu Fuß oder mit dem Fahrrad zurückzulegen.</p>
+            
+            <p>Bitte tragen Sie in der Karte ein, wo eine Problemstelle ist und beschreiben Sie diese bitte kurz.</p>
+            
+            <p>Je nach Art des Problems stehen verschiedene Symbole zur Verfügung.</p>
+            
+            <p>Der VCÖ sammelt die Problemstellen und leitet diese dann an die zuständige Stelle in der Gemeinde bzw. im Bezirk weiter. Denn gute Bedingungen zum Gehen und Radfahren in Österreichs Gemeinden und Städte sind wichtig.</p><br>
 
-            <p>Mobilität und Transport sind für alle Menschen wichtig und zentral für eine Gesellschaft. Unser aktuelles Verkehrssystem verbraucht enorme Mengen Öl, versiegelt riesige Flächen und
-            schadet der Gesundheit.</p>
-
-            <p>Ziel des VCÖ sind faire Mobilitätschancen für alle Menschen unabhängig von Alter, Einkommen und Gesundheit. Dabei gilt es eine intakte Umwelt als Lebensgrundlage auch für zukünftige Generationen zu erhalten und die Schäden für Mensch und Umwelt so gering wie möglich zu halten.</p>
-
-            <p>Mehr Informationen zum VCÖ und seinen Zielen finden Sie 
-            <a href="https://www.vcoe.at/ueber-vcoe/ueber-vcoe">hier</a>.</p>
+            <p>
+            Vielen Dank!
+            </p>
         </div>
 
         <div class="col-md-2">
