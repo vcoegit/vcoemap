@@ -18,7 +18,7 @@ if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
 }
 
 // either new or old, it should live at most for another hour
-$_SESSION['discard_after'] = $now + 100;
+$_SESSION['discard_after'] = $now + 1000;
 
 $_SESSION['csrf_token'] = uniqid('', true);
 
@@ -155,6 +155,24 @@ include("./includes/header.php");
 		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
 
+    // var BasemapAT_basemap = L.tileLayer('https://maps{s}.wien.gv.at/basemap/geolandbasemap/{type}/google3857/{z}/{y}/{x}.{format}', {
+	// maxZoom: 20,
+	// attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
+	// subdomains: ["", "1", "2", "3", "4"],
+	// type: 'normal',
+	// format: 'png',
+	// bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+    // });
+
+    var BasemapAT_grau = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmapgrau/{type}/google3857/{z}/{y}/{x}.{format}', {
+	maxZoom: 19,
+	attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
+	subdomains: ["", "1", "2", "3", "4"],
+	type: 'normal',
+	format: 'png',
+	bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+    });
+
     var grayscale = L.tileLayer(mbUrl, 
                                 {
                                     id: 'mapbox/light-v9', 
@@ -181,7 +199,7 @@ include("./includes/header.php");
                 <?= key_exists('centerLng', $_SESSION) ? $_SESSION['centerLng'] : 13.090210; ?>
                 ],
         zoom: <?= key_exists('zoom', $_SESSION) ? $_SESSION['zoom'] : 8; ?>,
-        layers: [grayscale]
+        layers: [grayscale, BasemapAT_grau]
     });
     
     // betrifft die Legende...
@@ -190,7 +208,7 @@ include("./includes/header.php");
     legend.onAdd = function (map) {
 
         var div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML = '<div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:25px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstellt / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div>';
+        div.innerHTML = '<div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:25px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car_exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div>';
 
         return div;
     };
@@ -239,12 +257,12 @@ include("./includes/header.php");
                 iconsize = 32;
                 break;
             case 'zu hohes Tempo Kfz':
-                iconurl = 'images/car.svg';
-                iconsize = 32;
+                iconurl = 'images/car_exclamation.svg';
+                iconsize = 36;
                 break;
             case 'zu wenig Platz Gehen':
                 iconurl = 'images/walking.svg';
-                iconsize = 40;
+                iconsize = 32;
                 break;
             case 'zu wenig Platz Rad':
                 iconurl = 'images/biking.svg';
@@ -316,9 +334,11 @@ include("./includes/header.php");
     var baseMaps = {
         "Grayscale": grayscale,
         "Streets": streets
+        
     };  
 
     var overlayMaps = {
+        "Basemap": BasemapAT_grau,
         "Karteneinträge": markers
     };
 
