@@ -199,7 +199,9 @@ include("./includes/header.php");
                 <?= key_exists('centerLng', $_SESSION) ? $_SESSION['centerLng'] : 13.090210; ?>
                 ],
         zoom: <?= key_exists('zoom', $_SESSION) ? $_SESSION['zoom'] : 8; ?>,
-        layers: [grayscale, BasemapAT_grau]
+        layers: [grayscale, BasemapAT_grau],
+        minZoom: 8,
+        maxZoom: 18
     });
     
     // betrifft die Legende...
@@ -344,24 +346,15 @@ include("./includes/header.php");
 
     L.control.layers(baseMaps, overlayMaps).addTo(mymap);
 
-    // var baseMaps = {
-    // "<span style='color: gray'>Grayscale</span>": grayscale,
-    // "Streets": streets,
-    // "MarkerGroup": markerGroup
-    // };
-
-
     //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
     mymap.doubleClickZoom.disable();
 
     mymap.on('click', function(e){
- 
+        //jedenfalls muss jetzt mal die Legende Weg...
+        mymap.removeControl(legend);
     });
 
     mymap.on('dblclick', function(e) {
-
-        //jedenfalls muss jetzt mal die Legende Weg...
-        mymap.removeControl(legend);
 
         Swal.fire({
             // title: 'Eintrag an dieser Stelle?',

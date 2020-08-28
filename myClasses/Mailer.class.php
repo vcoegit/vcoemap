@@ -9,16 +9,20 @@ class Mailer{
     private $username;
     private $password;
     public $objEmail;
+    private $configs; //Array
 
 
     public function __construct(Mail $objEmail){
         /**
          * Das könnte man auch in ein Konfigurationsfile auslagern...
          */
+
+        $this->configs = include('config.php');
+
         $this->objEmail = $objEmail;
-        $this->smtp_server = 'smtp.office365.com';
-        $this->username = 'scc@vcoe.at';
-        $this->password = '!14B6322050Jan';
+        $this->smtp_server = $this->configs['mailaccount']['smtp_server'];
+        $this->username = $this->configs['mailaccount']['username'];
+        $this->password = $this->configs['mailaccount']['password'];
     }
     
     public function sendConfirmationMail() : int{
@@ -27,11 +31,8 @@ class Mailer{
 
         try {
             // prepare email message
-        
-            // $message = \Swift_Message::newInstance()
             $message = (new \Swift_Message('Bestätigungslink'))
-                // ->setSubject('Test of Swift Mailer')
-                ->setFrom(['christian.schaefer@vcoe.at' => 'VCÖ - Mobilität mit Zukunft'])
+                ->setFrom([$this->configs['mailaccount']['email_from_email'] => $this->configs['mailaccount']['email_from_name']])
                 ->setTo($this->objEmail->get_To())
                 ->setSubject($this->objEmail->get_Subject());
 
@@ -174,8 +175,6 @@ HEREDOC;
                 ->addPart($this->objEmail->get_BodyText(), 'text/plain')
             ;
             
-            // echo $message->toString();
-        
             $transport = (new \Swift_SmtpTransport($this->smtp_server, 587, 'tls'))
                             ->setUsername($this->username)
                             ->setPassword($this->password);
@@ -215,12 +214,10 @@ HEREDOC;
 
         try {
             // prepare email message
-        
-            // $message = \Swift_Message::newInstance()
             $message = (new \Swift_Message('Bestätigungslink'))
                 // ->setSubject('Test of Swift Mailer')
-                ->setFrom(['christian.schaefer@vcoe.at' => 'VCÖ - Mobilität mit Zukunft'])
-                ->setTo('christian.schaefer@vcoe.at')
+                ->setFrom([$this->configs['mailaccount']['email_from_email'] => $this->configs['mailaccount']['email_from_name']])
+                ->setTo([$this->configs['mailaccount']['email_to_email']])
                 ->setSubject('Neuer Eintag in VCOE-Kartentool - please check!');
 
                 $logo = $message->embed((new \Swift_Image())->fromPath('images/vcoe_logo_newsletter.png'));
