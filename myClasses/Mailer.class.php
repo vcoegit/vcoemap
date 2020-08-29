@@ -20,19 +20,35 @@ class Mailer{
         $this->configs = include('config.php');
 
         $this->objEmail = $objEmail;
-        $this->smtp_server = $this->configs['mailaccount']['smtp_server'];
-        $this->username = $this->configs['mailaccount']['username'];
-        $this->password = $this->configs['mailaccount']['password'];
+
+        if($this->configs['env']=='dev'){
+            $this->smtp_server = $this->configs['env_dev']['mailaccount']['smtp_server'];
+            $this->username = $this->configs['env_dev']['mailaccount']['username'];
+            $this->password = $this->configs['env_dev']['mailaccount']['password'];
+        }else{
+            $this->smtp_server = $this->configs['env_prod']['mailaccount']['smtp_server'];
+            $this->username = $this->configs['env_prod']['mailaccount']['username'];
+            $this->password = $this->configs['env_prod']['mailaccount']['password'];         
+        }
+
     }
     
     public function sendConfirmationMail() : int{
 
     //$mailbody = 'Bitte öffnen sie folgenden Link um ihre email-Adresse zu bestätigen. \n';
 
+    if($this->configs['env']=='dev'){
+        $email_from = $this->configs['env_dev']['mailaccount']['email_from_email'];
+        $name_from = $this->configs['env_dev']['mailaccount']['email_from_name'];
+    }else{
+        $email_from = $this->configs['env_prod']['mailaccount']['email_from_email'];
+        $name_from = $this->configs['env_prod']['mailaccount']['email_from_name'];
+    }
+
         try {
             // prepare email message
             $message = (new \Swift_Message('Bestätigungslink'))
-                ->setFrom([$this->configs['mailaccount']['email_from_email'] => $this->configs['mailaccount']['email_from_name']])
+                ->setFrom([$email_from => $name_from])
                 ->setTo($this->objEmail->get_To())
                 ->setSubject($this->objEmail->get_Subject());
 
@@ -212,12 +228,22 @@ HEREDOC;
         $lng = $objEntry->get_lng();
         $linkDelete = $objEntry->get_linkDelete();
 
+        if($this->configs['env']=='dev'){
+            $email_from = $this->configs['env_dev']['mailaccount']['email_from_email'];
+            $name_from = $this->configs['env_dev']['mailaccount']['email_from_name'];
+            $email_to = $this->configs['env_dev']['mailaccount']['email_to_email'];
+        }else{
+            $email_from = $this->configs['env_prod']['mailaccount']['email_from_email'];
+            $name_from = $this->configs['env_prod']['mailaccount']['email_from_name'];
+            $email_to = $this->configs['env_prod']['mailaccount']['email_to_email'];
+        }
+
         try {
             // prepare email message
             $message = (new \Swift_Message('Bestätigungslink'))
                 // ->setSubject('Test of Swift Mailer')
-                ->setFrom([$this->configs['mailaccount']['email_from_email'] => $this->configs['mailaccount']['email_from_name']])
-                ->setTo([$this->configs['mailaccount']['email_to_email']])
+                ->setFrom([$email_from => $name_from])
+                ->setTo([$email_to])
                 ->setSubject('Neuer Eintag in VCOE-Kartentool - please check!');
 
                 $logo = $message->embed((new \Swift_Image())->fromPath('images/vcoe_logo_newsletter.png'));

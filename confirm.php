@@ -2,7 +2,7 @@
 session_start();
 // echo '<p>TEST CONFIRM</p>';
 
-include_once('myClasses\Vcoeoci.class.php'); 
+include_once('myClasses/Vcoeoci.class.php'); 
 
 if(key_exists('hsh', $_GET) and strlen($_GET['hsh']) == 32){
     $vcoe = New myClasses\Vcoeoci;

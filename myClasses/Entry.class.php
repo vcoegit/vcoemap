@@ -1,7 +1,7 @@
 <?php 
 namespace myClasses;
 
-include_once 'myClasses\Vcoeoci.class.php'; 
+include_once 'myClasses/Vcoeoci.class.php'; 
 
 class Entry{
 
@@ -17,9 +17,12 @@ class Entry{
     private $uploadUrl;
     private $linkConfirm;
     private $linkDelete;
+    private $configs;
 
 
     public function __construct(){
+
+        $this->configs = include('config.php');
 
     }
 
@@ -36,7 +39,13 @@ class Entry{
     }
 
     private function set_linkDelete(){
-        $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/block.php?hsh=' . $this->get_hashedEmail() . '&entryid=' . $this->get_entryid();
+
+        if($this->configs['env'=='dev']){
+            $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/block.php?hsh=' . $this->get_hashedEmail() . '&entryid=' . $this->get_entryid();
+        }else{
+            $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/block.php?hsh=' . $this->get_hashedEmail() . '&entryid=' . $this->get_entryid();    
+        }
+
     }
 
     public function get_linkDelete(){

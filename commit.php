@@ -4,11 +4,11 @@
  * Hierher wird das Formular des Popups geschickt!
  */
 
- include_once('myClasses\Vcoeoci.class.php'); 
- include_once('myClasses\MailTemplate.class.php');
- include_once('myClasses\Mail.class.php');
- include_once('myClasses\Mailer.class.php');
- include_once('myClasses\Entry.class.php');
+ include_once('myClasses/Vcoeoci.class.php'); 
+ include_once('myClasses/MailTemplate.class.php');
+ include_once('myClasses/Mail.class.php');
+ include_once('myClasses/Mailer.class.php');
+ include_once('myClasses/Entry.class.php');
 
 /**
  * Stimmmt das csrf-Token?

@@ -22,7 +22,7 @@ $_SESSION['discard_after'] = $now + 1000;
 
 $_SESSION['csrf_token'] = uniqid('', true);
 
-require('myClasses\Vcoeoci.class.php');
+require('myClasses/Vcoeoci.class.php');
 
 include("./includes/header.php");
 
@@ -132,7 +132,7 @@ include("./includes/header.php");
 
 <?php
     $arr = [];
-    $query = "SELECT * FROM ENTRIES WHERE MARKED_DEL = 0";
+    $query = "SELECT * FROM entries WHERE MARKED_DEL = 0";
 
     $vcoe = New myClasses\Vcoeoci;
     $arr = $vcoe->ArrayFromDB($query);
@@ -200,7 +200,7 @@ include("./includes/header.php");
                 ],
         zoom: <?= key_exists('zoom', $_SESSION) ? $_SESSION['zoom'] : 8; ?>,
         layers: [grayscale, BasemapAT_grau],
-        minZoom: 8,
+        minZoom: 6,
         maxZoom: 18
     });
     

@@ -1,7 +1,7 @@
 <?php 
 namespace myClasses;
 
-include_once 'myClasses\Vcoeoci.class.php'; 
+include_once 'myClasses/Vcoeoci.class.php'; 
 
 class Mail{
 

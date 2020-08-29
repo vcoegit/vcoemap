@@ -9,6 +9,7 @@ class ConnectionMysql{
 
 public static $conn = null;
 public static $instance = null;
+private $configs; //Array
 
 //der Constructor wird protected gesetzt, d.h. von ausserhalb des Objekts kann keine Instanz mehr erstellt werden...
 /**
@@ -16,11 +17,18 @@ public static $instance = null;
  */
 protected function __construct(){
     
-    $configs = include('config.php');
+    $this->configs = include('config.php');
 
-    $dsn = $configs['dsn'];
-    $user = $configs['user'];
-    $password = $configs['password'];
+    if($this->configs['env']=='dev'){
+        $dsn = $this->configs['env_dev']['dsn'];
+        $user = $this->configs['env_dev']['user'];
+        $password = $this->configs['env_dev']['password'];
+    }else{
+        $dsn = $this->configs['env_prod']['dsn'];
+        $user = $this->configs['env_prod']['user'];
+        $password = $this->configs['env_prod']['password'];
+    }
+
     
     try {
         self::$conn = new PDO($dsn, $user, $password);
