@@ -209,14 +209,33 @@ include("./includes/header.php");
 
     legend.onAdd = function (map) {
 
-        var div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML = '<div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:25px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car_exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div>';
+        var div = L.DomUtil.create('div', 'infolegend');
+        div.innerHTML = '<div class="container"><div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:5px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><button type="button" id = "legendclose" class="btn btn-outline-dark" onclick="toggleLegend();">x</button><br><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car_exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div></div>';
 
         return div;
     };
 
     legend.addTo(mymap);
 
+    // mymap.on('click', function(e){
+    //     jedenfalls muss jetzt mal die Legende Weg...
+    //     mymap.removeControl(legend);
+    // });
+
+    //removeFrom( <Map> map )
+
+    showLegend = true;  // default value showing the legend
+
+    var toggleLegend = function(){
+        if(showLegend === true){
+        /* use jquery to select your DOM elements that has the class 'legend' */
+           $('.infolegend').hide(); 
+           showLegend = false; 
+        }else{
+           $('.infolegend').show();
+           showLegend = true; 
+        }
+    }
 
     // mymap.setLayoutProperty('country-label', 'text-field', [
     //     'get',
@@ -349,10 +368,10 @@ include("./includes/header.php");
     //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
     mymap.doubleClickZoom.disable();
 
-    mymap.on('click', function(e){
-        //jedenfalls muss jetzt mal die Legende Weg...
-        mymap.removeControl(legend);
-    });
+    // mymap.on('click', function(e){
+    //     //jedenfalls muss jetzt mal die Legende Weg...
+    //     mymap.removeControl(legend);
+    // });
 
     mymap.on('dblclick', function(e) {
 
