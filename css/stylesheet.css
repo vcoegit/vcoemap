@@ -164,12 +164,9 @@ body {
 }
 
 #legendclose{
-    line-height: 12px;
-    margin-top: 1px;
-    margin-right: 2px;
     position:absolute;
     top:6px;
-    right:20px;
+    right:24px;
 }
 
 @media screen and (max-height: 450px) {

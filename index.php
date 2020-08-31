@@ -210,17 +210,12 @@ include("./includes/header.php");
     legend.onAdd = function (map) {
 
         var div = L.DomUtil.create('div', 'infolegend');
-        div.innerHTML = '<div class="container"><div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:5px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><button type="button" id = "legendclose" class="btn btn-outline-dark" onclick="toggleLegend();">x</button><br><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car_exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div></div>';
+        div.innerHTML = '<div class="container"><div style="background-color:#FFFFFF;border-color:#0082b2; border-style:solid;border-width:1px; padding:1em; border-radius:5px;"><h6 style="background-color:#FFFFFF;">Legende:</h6><button type="button" class="close" id = "legendclose" onclick="toggleLegend();" aria-label="Close"><span aria-hidden="true">&times;</span></button><table style="height:100%; width:100%;"><tbody><tr><td style="vertical-align:-25%"><img src="images/biking.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Fahrrad</p></td></tr><tr><td style="vertical-align:-25%"><img src="images/walking.svg" style="height:30px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Gefahrenstelle / zu wenig Platz Gehen</p</td></tr><tr><td style="vertical-align:-25%"><img src="images/car_exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> zu hohes Tempo Kfz-Verkehr</p></td></tr><td style="vertical-align:-25%"><img src="images/exclamation.svg" style="height:24px; width:auto"></td><td style="vertical-align:-25%"><p style="vertical-align:-25%"> Sonstige Problemstelle</p></td></tr></tbody></table></div></div>';
 
         return div;
     };
 
     legend.addTo(mymap);
-
-    // mymap.on('click', function(e){
-    //     jedenfalls muss jetzt mal die Legende Weg...
-    //     mymap.removeControl(legend);
-    // });
 
     //removeFrom( <Map> map )
 
@@ -365,16 +360,9 @@ include("./includes/header.php");
 
     L.control.layers(baseMaps, overlayMaps).addTo(mymap);
 
-    //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
-    mymap.doubleClickZoom.disable();
-
-    // mymap.on('click', function(e){
-    //     //jedenfalls muss jetzt mal die Legende Weg...
-    //     mymap.removeControl(legend);
-    // });
-
-    mymap.on('dblclick', function(e) {
-
+    mymap.on('dblclick', function(e){
+        // mymap.removeControl(legend);
+        
         Swal.fire({
             // title: 'Eintrag an dieser Stelle?',
             text: "Wollen sie an dieser Stelle einen Karteneintrag machen?",
@@ -386,41 +374,119 @@ include("./includes/header.php");
             cancelButtonText: 'Nein, abbrechen!'
         }).then((result) => {
         if (result.value) {
-            setEntry(e.latlng)
-            // Swal.fire(
-            // 'Deleted!',
-            // 'Your file has been deleted.',
-            // 'success'
-            // )
+            $('#exampleModal').modal('show');
+            $('#centerLng').val(mymap.getCenter().lng);
+            $('#centerLat').val(mymap.getCenter().lat);
+            $('#lng').val(e.latlng.lng);
+            $('#lat').val(e.latlng.lat);
+            $('#zoom').val(mymap.getZoom());
             }
         })
 
+        // var button = $(event.relatedTarget) // Button that triggered the modal
+        // var recipient = button.data('whatever') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        // var modal = $('#exampleModal')
+        // modal.find('.modal-title').text('New message to ' + 'bla')
+        // modal.find('.modal-body input').val('blabla')
+
     });
 
-    function setEntry(latlng){
+    //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
+    mymap.doubleClickZoom.disable();
 
-        //Marker
-        //L.marker(latlng).addTo(mymap);
+    // mymap.on('dblclick', function(e) {
 
-        //Popup
-        var popup = L.popup()
-        .setLatLng(latlng)
-        .setContent(
-            '<div class="container"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + latlng.lat + '"><input type="hidden" name="lng" value="' + latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Gefahrenstelle Gehen</option><option>Gefahrenstelle Rad</option><option>zu hohes Tempo Kfz</option><option>zu wenig Platz Rad</option><option>zu wenig Platz Gehen</option><option>Sonstiges</option></select></div><input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
-        )
-        .openOn(mymap);
+    //     Swal.fire({
+    //         // title: 'Eintrag an dieser Stelle?',
+    //         text: "Wollen sie an dieser Stelle einen Karteneintrag machen?",
+    //         type: 'question',
+    //         showCancelButton: true,
+    //         // confirmButtonColor: '#3085d6',
+    //         // cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Ja!',
+    //         cancelButtonText: 'Nein, abbrechen!'
+    //     }).then((result) => {
+    //     if (result.value) {
+    //         setEntry(e.latlng)
+    //         }
+    //     })
 
-    }
+    // });
 
-    function openNav() {
-    document.getElementById("formPanel").style.width = "100%";
-    }
+    // function setEntry(latlng){
 
-    function closeNav() {
-    document.getElementById("formPanel").style.width = "0%";
-    }
+    //     //Marker
+    //     //L.marker(latlng).addTo(mymap);
+
+    //     //Popup
+    //     var popup = L.popup()
+    //     .setLatLng(latlng)
+    //     .setContent(
+    //         '<div class="container" style="z-index:10000"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + latlng.lat + '"><input type="hidden" name="lng" value="' + latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Gefahrenstelle Gehen</option><option>Gefahrenstelle Rad</option><option>zu hohes Tempo Kfz</option><option>zu wenig Platz Rad</option><option>zu wenig Platz Gehen</option><option>Sonstiges</option></select></div><input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
+    //     )
+    //     .openOn(mymap);
+
+    // }
+
+    // function openNav() {
+    // document.getElementById("formPanel").style.width = "100%";
+    // }
+
+    // function closeNav() {
+    // document.getElementById("formPanel").style.width = "0%";
+    // }
 
 </script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Karteneintrag erstellen...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group">
+                <div class="modal-body">
+                
+                    <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>">
+                    <input type="hidden" name="lat" id="lat" class="form-control" value=""><br>
+                    <input type="hidden" name="lng" id="lng" class="form-control" value=""><br>
+                    <input type="hidden" name="centerLng" id="centerLng" class="form-control" value=""><br>
+                    <input type="hidden" name="centerLat" id="centerLat" class="form-control" value=""><br>
+                    <input type="hidden" name="zoom" id="zoom" class="form-control" value=""><br>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required>
+                    <br> 
+                    <div class="form-group">
+                    <label for="notificationtype">Kategorie</label>
+                    <select class="form-control" id="notificationtype" name="notificationtype">
+                        <option>Gefahrenstelle Gehen</option>
+                        <option>Gefahrenstelle Rad</option>
+                        <option>zu hohes Tempo Kfz</option>
+                        <option>zu wenig Platz Rad</option>
+                        <option>zu wenig Platz Gehen</option>
+                        <option>Sonstiges</option>
+                    </select>
+                    </div>
+                    <input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ">
+                    <br>
+                    <textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea>
+                    <br>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="1024000">
+                    <input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*">
+
+                </div> <!--Modal Body-->
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary" id="submit">Eintrag bestätigen</button>
+                </div> <!--Modal Footer-->
+            </form>
+        </div>
+    </div>
+</div>
 
 <div id="formPanel" class="overlay">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
