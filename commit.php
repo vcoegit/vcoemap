@@ -80,7 +80,16 @@ if(key_exists("watchthispix", $_FILES) && strlen($_FILES["watchthispix"]["name"]
     $uploadfilename = $_FILES["watchthispix"]["name"];
     $saveddate = date("mdy-Hms");
     $newfilename = "uploads/".$saveddate."_".$uploadfilename;
-    $uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).'/'.$newfilename;
+    
+    $configs = include('config.php');
+
+    if($configs['env']=='dev'){
+        $uploadurl = 'http://'.$_SERVER['SERVER_NAME'].dirname($_SERVER['REQUEST_URI']).'/'.$newfilename;
+    }else{
+        $uploadurl = $newfilename;
+    }
+    
+
 
     //Entry-Objekt soll uploadUrl auch kennen...
     $objEntry->set_uploadUrl($uploadurl);
