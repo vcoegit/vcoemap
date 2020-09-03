@@ -45,8 +45,8 @@ class MailTemplate extends Mail{
 
         $this->set_from('christian.schaefer@vcoe.at');
 
-        $this->set_subject('Bestätigungslink VCÖ-Karten-Tool');
-
+        $this->set_subject('Bestätigungslink problemstellen.vcoe.at');
+        
     }
 }
 ?>

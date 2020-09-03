@@ -70,10 +70,19 @@ if(key_exists('lng', $_POST) && $_POST['lng'] > 0){
     $objEntry->set_lng($_POST['lng']);
 }
 
+if(key_exists('toc', $_POST)){
+    $objEntry->set_toc(true);
+}else{
+    $objEntry->set_toc(false);
+    // auch wenn das nicht passierten sollte, 
+    // der Beitrag, darf nicht weiterverarbeitet werden
+    header("Location: index.php?noticode=6");
+    die();
+}
+
 /**
  * und dann gibt es noch den File-Upload...
  */
-
 
 if(key_exists("watchthispix", $_FILES) && strlen($_FILES["watchthispix"]["name"]) > 0){ 
     $tmp_name = $_FILES["watchthispix"]["tmp_name"];
@@ -89,8 +98,6 @@ if(key_exists("watchthispix", $_FILES) && strlen($_FILES["watchthispix"]["name"]
         $uploadurl = $newfilename;
     }
     
-
-
     //Entry-Objekt soll uploadUrl auch kennen...
     $objEntry->set_uploadUrl($uploadurl);
 

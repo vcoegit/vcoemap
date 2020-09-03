@@ -137,7 +137,7 @@ class Mailer{
                 <h1 style="font-size: 21px; font-weight: normal; color: #3188b6; margin: 12px 0;">
                 Nur noch ein Klick und Ihr Beitrag ist veröffentlicht!</h1>
                 
-                <p>Danke für Ihren Beitrag zum VCÖ-Check &quot;Hindernisse für Bewegungsaktive Mobilität&quot;.</p>
+                <p>Danke für Ihren Beitrag zum VCÖ-Check &quot;Hindernisse für bewegungsaktive Mobilität&quot;.</p>
                 
                 <p>Bitte bestätigen Sie mit einem Klick auf den folgenden Link Ihre E-Mail-Adresse</p>
                 
@@ -167,13 +167,20 @@ class Mailer{
                 <p>Unter www.vcoe.at/zusendungen erfahren Sie, warum Sie diese Nachricht erreicht hat. Die ausführliche Datenschutzerklärung des VCÖ finden Sie auf www.vcoe.at/datenschutz.</p>
                 </td>
                 </tr>
+
+                <tr>
+                <td>
+                <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0 width="100%" style='width:100.0%;background:#FECB13'><tr><td width=75 style='width:56.25pt;padding:4.5pt 9.0pt 4.5pt 9.0pt'><p class=MsoNormal style='line-height:18.0pt'><span style='font-size:16.0pt;font-family:"Verdana",sans-serif'><span style='color:white'><img border=0 id="_x0000_i1026" src="http://mailer.marmara.co.at/att/vcoe/arrow.jpg" alt=VCÖ></span><o:p></o:p></span></p></td><td style='padding:4.5pt 9.0pt 4.5pt 9.0pt'><p class=MsoNormal style='line-height:18.0pt'><span style='font-size:16.0pt;font-family:"Verdana",sans-serif'><a href="http://www.vcoe.at/spende" style='text-decoration:none'><span style='text-decoration:none'>Bitte unterstützen Sie den VCÖ bei seinem Einsatz für Bewegungsaktive Mobilität mit Ihrer Spende </span></a><o:p></o:p></span></p></td></tr></table>
+                </td>
+                </tr>
+
                 </tbody>
                 </table>
                 </td>
                 </tr>
                 <tr>
                 <td bgcolor="#3188b6" style="font-family: Verdana, sans-serif; font-size: 14px; line-height: 24px; background: #3188b6;" valign="top" width="100%">                
-                
+
                 </td>
                 </tr>
                 

@@ -17,6 +17,7 @@ class Entry{
     private $uploadUrl;
     private $linkConfirm;
     private $linkDelete;
+    private $toc;
     private $configs;
 
 
@@ -133,6 +134,16 @@ class Entry{
     
     public function get_uploadUrl(){
         return $this->uploadUrl;
+    }
+
+    //toc - Terms of conditions
+    public function set_toc(String $truefalse) : Entry{
+        $this->toc = $truefalse;
+        return $this;
+    }
+
+    public function get_toc(){
+        return $this->toc;
     }
 
     public function save() : bool {

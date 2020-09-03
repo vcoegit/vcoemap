@@ -66,7 +66,7 @@ include("./includes/header.php");
     // $message =  key_exists('notification', $_SESSION) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
 
     $noticode = 1; //default
-    $message = 'Auf dieser Website können Sie Problemstellen auf Ihren Wegen zu Fuß oder mit dem Fahrrad eintragen. Bitte klicken Sie auf der Karte auf die Straße, wo sie eine Problemstelle sehen. Nutzen Sie die entsprechende Kategorie und beschreiben Sie bitte kurz das Problem. Sie erhalten dann an die angegebene E-Mail Adresse einen Bestätigungslink. Nach der Bestätigung wird der Beitrag frei geschaltet. Sie können selbstverständlich mehrere Problemstellen eintragen. Danke!';
+    $message = 'Hier können Sie Problemstellen auf Ihren Wegen zu Fuß oder mit dem Fahrrad eintragen. Bitte zoomen Sie je nach Gerät per Mausrad, den +/- Tasten oder mit den Fingern am Bildschirm zu der Stelle, wo Sie ein Problem wahrnehmen. Per Doppelklick oder Double Tap erzeugen Sie einen neuen Eintrag.';
 
     if(key_exists('noticode', $_GET)){
         $noticode = $_GET['noticode'];
@@ -85,7 +85,10 @@ include("./includes/header.php");
                 break;    
             case 5:
                 $message = "Vielen Dank! Ihr Eintrag wurde veröffentlicht! Wir freuen uns über weitere Beiträge.";    
-                break;      
+                break;    
+            case 6:
+                $message = "Oops, hier ist offenbar ein Fehler passiert! Wir konnten ihre Eingaben nicht verarbeiten.";    
+                break;     
             default:
                 $message = "Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.";
 
@@ -96,7 +99,7 @@ include("./includes/header.php");
         $alertType = '';
     }elseif(in_array($noticode, array(3, 5))){
         $alertType = 'success';
-    }elseif(in_array($noticode, array(4) )){
+    }elseif(in_array($noticode, array(4, 6) )){
         $alertType = 'error';
     }else{
         $alertType = null;
@@ -118,7 +121,7 @@ include("./includes/header.php");
 
     ?>
     
-    <title>vcoemap</title>
+    <title>Problemstellen, Bewegungsaktive Mobilität</title>
 
 </head>
 
@@ -143,9 +146,6 @@ include("./includes/header.php");
 <script src="vendor/calvinmetcalf/catiline.js"></script>
 <script src="vendor/calvinmetcalf/leaflet.shpfile.js"></script>
 <script>
-
-    // how to access elements in multi-dimensional array in JavaScript
-    //alert( products[0][1] ); // Chocolate Cake
 
     var places = <?php echo json_encode( $arr ) ?>;
 
@@ -201,11 +201,11 @@ include("./includes/header.php");
         zoom: <?= key_exists('zoom', $_SESSION) ? $_SESSION['zoom'] : 8; ?>,
         layers: [grayscale, BasemapAT_grau],
         minZoom: 6,
-        maxZoom: 18
+        maxZoom: 20
     });
     
     // betrifft die Legende...
-    var legend = L.control({position: 'bottomleft'});
+    var legend = L.control({position: 'topleft'});
 
     legend.onAdd = function (map) {
 
@@ -268,7 +268,7 @@ include("./includes/header.php");
                 iconurl = 'images/walking.svg';
                 iconsize = 32;
                 break;
-            case 'Gefahrenstelle Rad':
+            case 'Gefahrenstelle Radfahren':
                 iconurl = 'images/biking.svg';
                 iconsize = 32;
                 break;
@@ -280,7 +280,7 @@ include("./includes/header.php");
                 iconurl = 'images/walking.svg';
                 iconsize = 32;
                 break;
-            case 'zu wenig Platz Rad':
+            case 'zu wenig Platz Radfahren':
                 iconurl = 'images/biking.svg';
                 iconsize = 32;
                 break;
@@ -306,13 +306,16 @@ include("./includes/header.php");
             icon: customIcon
         }
 
+        var strimage = filepath.length > 0 ? '<img src="' + filepath + '" alt="" height=auto width=250>' : '';
+
+        var strpopup = '<div style="background-color:#EAF3F8;"><h6 style="background-color:#EAF3F8; color:#3188b6">'+notificationtype+'</h6>'+ 
+                strimage +
+                '<p style="color: #040404";>Beschreibung:<br>'+body+'</p>'+
+                '<p style="color: #040404";>PLZ: '+plz+'</p></div>'
+
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation, markerOptions);
-        marker.bindPopup('<h6>'+notificationtype+'</h6>'+
-                '<img src="' + filepath + '" alt="" height=auto width=250>'+
-                '<p>'+body+'</p>'+
-                '<p>PLZ: '+plz+'</p>'
-                );
+        marker.bindPopup(strpopup);
         
         markers.addLayer(marker);
 
@@ -445,6 +448,8 @@ include("./includes/header.php");
 
 </script>
 
+<div id="info-svg"><img id="info" src="images/list.svg" alt="" onclick=toggleLegend()></div>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -455,46 +460,69 @@ include("./includes/header.php");
                 </button>
             </div>
 
-            <div class="modal-body">
-                <form action="commit.php" method="post" id="newmapentry" enctype="multipart/form-data">
+
+            <form  action="commit.php" method="post" id="newmapentry" enctype="multipart/form-data">
+
+                <div class="modal-body">
                     
-                        <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>">
-                        <input type="hidden" name="lat" id="lat" class="form-control" value="">
-                        <input type="hidden" name="lng" id="lng" class="form-control" value="">
-                        <input type="hidden" name="centerLng" id="centerLng" class="form-control" value="">
-                        <input type="hidden" name="centerLat" id="centerLat" class="form-control" value="">
-                        <input type="hidden" name="zoom" id="zoom" class="form-control" value="">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required>
-                        <br> 
+                            <p>Wählen Sie hier bitte die passende Kategorie, geben Sie die Postleitzahl an und beschreiben Sie kurz das Problem. Sie können auch ein Foto der Problemstelle anfügen. Sie erhalten an die angegebene E-Mail Adresse einen Bestätigungslink. Nach der Bestätigung wird der Beitrag freigeschaltet. Sie können gerne mehrere Problemstellen eintragen. Danke!</p>
 
-                            <label for="notificationtype">Kategorie</label>
-                            <select class="form-control" id="notificationtype" name="notificationtype">
-                                <option>Gefahrenstelle Gehen</option>
-                                <option>Gefahrenstelle Rad</option>
-                                <option>zu hohes Tempo Kfz</option>
-                                <option>zu wenig Platz Rad</option>
-                                <option>zu wenig Platz Gehen</option>
-                                <option>Sonstiges</option>
-                            </select>
-                        
-                        <label for="plz">PLZ</label>
-                        <input type="text" class="form-control" id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ">
-                        <br>
-                        <label for="body">Beschreibung</label>
-                        <textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea>
-                        <br>
-                        <input type="hidden" name="MAX_FILE_SIZE" value="1024000">
-                        <label for="file">Hier können Sie ein Bild hochladen...</label>
-                        <input type="file" id="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*">
-                </form>
+                            <div class="form-group">
+                                <input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>">
+                                <input type="hidden" name="lat" id="lat" class="form-control" value="">
+                                <input type="hidden" name="lng" id="lng" class="form-control" value="">
+                                <input type="hidden" name="centerLng" id="centerLng" class="form-control" value="">
+                                <input type="hidden" name="centerLat" id="centerLat" class="form-control" value="">
+                                <input type="hidden" name="zoom" id="zoom" class="form-control" value="">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email*</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" maxlength="50" required>
+                            </div>
 
-            </div> <!--Modal Body-->
+                            <div class="form-group">
+                                <label for="notificationtype">Kategorie*</label>
+                                <select class="form-control" id="notificationtype" name="notificationtype">
+                                    <option>Gefahrenstelle Gehen</option>
+                                    <option>Gefahrenstelle Radfahren</option>
+                                    <option>zu hohes Tempo Kfz</option>
+                                    <option>zu wenig Platz Radfahren</option>
+                                    <option>zu wenig Platz Gehen</option>
+                                    <option>Sonstiges</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="plz">PLZ</label>
+                                <input type="text" class="form-control" id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ (Problemstelle)" required>
+                            </div>
 
-            <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary" onclick="submit_entry()" id="submit">Eintrag bestätigen</button>
-            </div> <!--Modal Footer-->
+                            <div class="form-group">
+                                <label for="body">Beschreibung*</label>
+                                <textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="1024000">
+                                <label for="file">Hier können Sie ein Bild hochladen...</label>
+                                <input type="file" id="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="toc">Ich akzeptiere die <a href="impressum.php#nutzungsbedingungen" target="_blank" rel="noopener noreferrer">Nutzungsbedingungen*</a></label>
+                                <input type="checkbox" name="toc" id="toc" required>
+                            </div>
+                    
+                </div> <!--Modal Body-->
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                        <button type="submit" class="btn btn-primary" onclick="submit_entry()" id="submit">Eintrag bestätigen</button>
+                </div> <!--Modal Footer-->
+
+            </form> <!-- damit die Front-End-Validierung funktioniert muss der Submit-Button innerhalb des Forms sein-->
+
         </div>
     </div>
 </div>
