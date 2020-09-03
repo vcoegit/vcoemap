@@ -80,16 +80,20 @@
             Jedenfalls unzulässig sind durch UserInnen veröffentlichte Texte, Fotos, Grafiken und dergleichen (in der Folge: Inhalte), die</p>
 
 
-            <p>> beleidigend, herabwürdigend, belästigend, diskriminierend, pornographisch, nationalsozialistisch, politisch oder religiös, oder jugendgefährdend sind; rechtswidrig sind oder rechtswidrig erlangt wurden
-            > strafrechtlich relevant sind
-            > gegen vertragliche Verpflichtungen verstoßen
-            > einen direkten oder indirekten Personenbezug herstellen lassen
-            > eine Verletzung der Rechte Dritter bedeuten (beispielsweise: Verletzung von geistigem Eigentum, Verletzung von Persönlichkeitsrechten, Verletzung des Rechtes am eigenen Bild, Inhalte, die KFZ Kennzeichen, Telefonnummern, E-Mail- und Post-Adressen und dergleichen erkennen lassen)
-            > Werbung enthalten
-            > das gesellschaftliche Zusammenleben oder die öffentliche Ordnung oder Sicherheit stören bzw. gefährden
-            > unrichtige Informationen enthalten (Falschmeldungen)
-            > der Netiquette widersprechen oder
-            > unsachlich formuliert sind oder den guten Sitten widersprechen<p>
+            <p>
+                <ul>
+                    <li>beleidigend, herabwürdigend, belästigend, diskriminierend, pornographisch, nationalsozialistisch, politisch oder religiös, oder jugendgefährdend sind; rechtswidrig sind oder rechtswidrig erlangt wurden</li>
+                    <li>strafrechtlich relevant sind</li>
+                    <li>gegen vertragliche Verpflichtungen verstoßen</li>
+                    <li>einen direkten oder indirekten Personenbezug herstellen lassen</li>
+                    <li>eine Verletzung der Rechte Dritter bedeuten (beispielsweise: Verletzung von geistigem Eigentum, Verletzung von Persönlichkeitsrechten, Verletzung des Rechtes am eigenen Bild, Inhalte, die KFZ Kennzeichen, Telefonnummern, E-Mail- und Post-Adressen und dergleichen erkennen lassen)</li>
+                    <li>Werbung enthalten</li>
+                    <li>das gesellschaftliche Zusammenleben oder die öffentliche Ordnung oder Sicherheit stören bzw. gefährden</li>
+                    <li>unrichtige Informationen enthalten (Falschmeldungen)</li>
+                    <li>der Netiquette widersprechen oder</li>
+                    <li>unsachlich formuliert sind oder den guten Sitten widersprechen</li>
+                </ul>
+            <p>
 
             <p>Weiters unzulässig ist jedenfalls die missbräuchliche oder die Services störende und vom VCÖ - Mobilität mit Zukunft nicht gestattete automatisierte Nutzung der App.</p>
 

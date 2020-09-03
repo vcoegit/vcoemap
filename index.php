@@ -259,6 +259,8 @@ include("./includes/header.php");
         var filepath = places[i][4];
         var notificationtype = places[i][5];
         var plz = places[i][6];
+        var toc = places[i][7];
+        var entryid = places[i][8];
         
         var iconurl;
         var iconsize;
@@ -311,7 +313,8 @@ include("./includes/header.php");
         var strpopup = '<div style="background-color:#EAF3F8;"><h6 style="background-color:#EAF3F8; color:#3188b6">'+notificationtype+'</h6>'+ 
                 strimage +
                 '<p style="color: #040404";>Beschreibung:<br>'+body+'</p>'+
-                '<p style="color: #040404";>PLZ: '+plz+'</p></div>'
+                '<p style="color: #040404";>PLZ: '+plz+'</p><br><br>'+
+                '<p style="color:#3188b6">('+entryid+')</p></div>'
 
         var markerLocation = new L.LatLng(lon, lat);
         var marker = new L.Marker(markerLocation, markerOptions);
