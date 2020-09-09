@@ -141,7 +141,7 @@ class Mailer{
                 
                 <p>Bitte bestätigen Sie mit einem Klick auf den folgenden Link Ihre E-Mail-Adresse</p>
                 
-                <p><a>$link</a></p>
+                <p><a href="$link" title="Problemstellen - Email Bestätigung">$link</a></p>
                 
                 <p>Ihr Beitrag wird gleich anschließend veröffentlicht und ist für alle anderen sichtbar.</p>
                 

@@ -28,16 +28,16 @@ class MailTemplate extends Mail{
         //$link = $_SERVER('HOST_NAME') . "/leaflet2020/$hashed_email";
         
         if($this->configs['env']=='dev'){
-            $this->link = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/confirm.php?hsh=' . 
+            $this->link = 'https://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/confirm.php?hsh=' . 
             $objEntry->get_hashedEmail();
         }else{
-            $this->link = 'http://' . $_SERVER['SERVER_NAME'] . '/confirm.php?hsh=' . 
+            $this->link = 'https://' . $_SERVER['SERVER_NAME'] . '/confirm.php?hsh=' . 
             $objEntry->get_hashedEmail();        
         }
 
 
         $this->set_bodyText('Ihre email-Adresse wurde in eines unserer Formulare auf ' . $_SERVER['SERVER_NAME'] . ' eingegeben.' . "\n" . 
-        'Um die Richtigkeit dieser Angabe zu bestätigen, klicken Sie bitte folgenden Link an:' . "\n" . $this->link . "\n" . 'Oder kopieren Sie den Link in die Adresszeile ihres Browsers.' . 
+        'Um die Richtigkeit dieser Angabe zu bestätigen, klicken Sie bitte folgenden Link an:' . "\n" . '<a href="' . $this->link . '" title="Problemstellen">' . $this->link . '</a>' . "\n" . 'Oder kopieren Sie den Link in die Adresszeile ihres Browsers.' . 
         'Ihr Beitrag erscheint anschließend auf unserer Karte!' . "\n" .
         'Vielen Dank für Ihren Beitrag!');
 
