@@ -37,6 +37,15 @@ $objEntry = New myClasses\Entry;
 
 /**User-Input is guilty unless the opposite is proven... */
 
+if(key_exists('gemeinde', $_POST) && strlen($_POST['gemeinde'])>0){
+    $objEntry->set_gemeinde(addslashes(htmlentities($_POST['gemeinde'])));
+}
+
+
+if(key_exists('bundesland', $_POST) && strlen($_POST['bundesland'])>0){
+    $objEntry->set_bundesland(addslashes(htmlentities($_POST['bundesland'])));    
+}
+
 if(key_exists('plz', $_POST) && strlen($_POST['plz'])>0){
     $objEntry->set_plz(addslashes(htmlentities($_POST['plz'])));
 }else{

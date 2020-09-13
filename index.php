@@ -508,12 +508,12 @@ include("./includes/header.php");
 
                             <div class="form-group">
                                 <label for="gemeinde">Gemeinde</label>
-                                <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="">
+                                <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="" readonly>
                             </div>
 
                             <div class="form-group">
                                 <label for="bundesland">Bundesland</label>
-                                <input type="text" name="bundesland" id="bundesland" class="form-control" value="">
+                                <input type="text" name="bundesland" id="bundesland" class="form-control" value="" readonly>
                             </div>
                             
                             <div class="form-group">

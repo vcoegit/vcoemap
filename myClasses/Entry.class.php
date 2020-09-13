@@ -142,6 +142,7 @@ class Entry{
 
     public function set_gemeinde(String $gemeinde) : Entry{
         $this->gemeinde = $gemeinde;
+        return $this;
     }
 
     public function get_gemeinde(){
@@ -150,6 +151,7 @@ class Entry{
 
     public function set_bundesland(String $bundesland) : Entry{
         $this->bundesland = $bundesland;
+        return $this;
     }
 
     public function get_bundesland(){
@@ -176,7 +178,7 @@ class Entry{
 
     public function save() : bool {
         $vcoe = New \myClasses\Vcoeoci;
-        $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email, plz, terms_of_use) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "' , '"  . $this->get_plz() . "' , '" . $this->get_toc() . "')"; 
+        $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email, plz, terms_of_use, gemeinde, bundesland) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "' , '"  . $this->get_plz() . "' , '" . $this->get_toc() . "' , '" . $this->get_gemeinde() . "', '" . $this->get_bundesland() . "')"; 
 
         if($vcoe->execute($query)>0){
             // $this->entryid = SELECT LAST_INSERT_ID();
