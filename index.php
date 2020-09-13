@@ -138,7 +138,7 @@ include("./includes/header.php");
     $query = "SELECT * FROM entries WHERE MARKED_DEL = 0";
 
     $vcoe = New myClasses\Vcoeoci;
-    $arr = $vcoe->ArrayFromDB($query);
+    $arr = $vcoe->EntriesArrayFromDB($query);
 ?>
 
 
@@ -148,6 +148,11 @@ include("./includes/header.php");
 <script>
 
     var places = <?php echo json_encode( $arr ) ?>;
+
+    //Daten aus hit.php...
+    var gemeinde;
+    var bundesland;
+    var staat;
 
 	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 	    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -380,17 +385,39 @@ include("./includes/header.php");
             cancelButtonText: 'Nein, abbrechen!'
         }).then((result) => {
         if (result.value) {
-            $('#exampleModal').modal('show');
 
-            //wichtig!!! - Die Keyboardeingaben müssen für Leaflet deaktiviert werden,
-            //damit es bei der Eingabe in das Formular nicht zu unerwartetem Verhalten kommt (z.B. Zooming out mit underscore, usw.)
-            mymap.keyboard.disable();
+                $.post( "hit.php", { lat: e.latlng.lat, lng: e.latlng.lng })
+                    .done(function( data ) {
+                            let arr_hit = data.split('|');
+                            // alert( "Data Loaded: " + jsondata.gemeinde);
+                            gemeinde = arr_hit[0];
+                            bundesland = arr_hit[1];
+                            staat = arr_hit[2];
+                    })
+                    .fail(function() {
+                            alert( "error" );
+                    })
+                    .always(function() {
+                            // was auf jeden Fall passieren soll...
+                            // alert( "finished" );
+                            $('#exampleModal').modal('show');
 
-            $('#centerLng').val(mymap.getCenter().lng);
-            $('#centerLat').val(mymap.getCenter().lat);
-            $('#lng').val(e.latlng.lng);
-            $('#lat').val(e.latlng.lat);
-            $('#zoom').val(mymap.getZoom());
+                            //wichtig!!! - Die Keyboardeingaben müssen für Leaflet deaktiviert werden,
+                            //damit es bei der Eingabe in das Formular nicht zu unerwartetem Verhalten kommt (z.B. Zooming out mit underscore, usw.)
+                            mymap.keyboard.disable();    
+
+                            $('#gemeinde').val(gemeinde);
+                            $('#bundesland').val(bundesland);
+                            $('#staat').val(staat);
+
+                            $('#centerLng').val(mymap.getCenter().lng);
+                            $('#centerLat').val(mymap.getCenter().lat);
+                            $('#lng').val(e.latlng.lng);
+                            $('#lat').val(e.latlng.lat);
+                            $('#zoom').val(mymap.getZoom());
+                    });
+            
+
             }
         })
 
@@ -477,6 +504,16 @@ include("./includes/header.php");
                                 <input type="hidden" name="centerLng" id="centerLng" class="form-control" value="">
                                 <input type="hidden" name="centerLat" id="centerLat" class="form-control" value="">
                                 <input type="hidden" name="zoom" id="zoom" class="form-control" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gemeinde">Gemeinde</label>
+                                <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bundesland">Bundesland</label>
+                                <input type="text" name="bundesland" id="bundesland" class="form-control" value="">
                             </div>
                             
                             <div class="form-group">

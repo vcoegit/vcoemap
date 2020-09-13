@@ -94,7 +94,7 @@ class Mail{
 
     //gibt es bereits freigeschaltete Einträge?
     $this->strSQL = "SELECT * from entries where email = '" . $this->get_to() . "' and marked_del = 0";
-        if(count($vcoe->ArrayFromDB($this->strSQL))>0){
+        if(count($vcoe->EntriesArrayFromDB($this->strSQL))>0){
             return true;
         }else{
             return false;

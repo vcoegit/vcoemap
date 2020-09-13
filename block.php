@@ -7,7 +7,7 @@ include_once('myClasses/Vcoeoci.class.php');
 if(key_exists('hsh', $_GET) and strlen($_GET['hsh']) == 32){
     $vcoe = New myClasses\Vcoeoci;
     $strsql1 = "select * from entries where hashed_email = '" . htmlentities($_GET['hsh']) . "'";
-    $arrRecs = $vcoe->ArrayFromDB($strsql1);
+    $arrRecs = $vcoe->EntriesArrayFromDB($strsql1);
 }else{
     $arrRecs = [];
 };

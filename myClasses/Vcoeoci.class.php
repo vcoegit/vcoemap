@@ -41,7 +41,7 @@ class Vcoeoci{
         
     }  
 
-    Public Function ArrayFromDB(string $query) : array {
+    Public Function EntriesArrayFromDB(string $query) : array {
 
         $arr = [];
 
@@ -57,6 +57,26 @@ class Vcoeoci{
                 $row['plz'],
                 $row['terms_of_use'],
                 $row['entryid']
+            ];
+
+        $arr[] = $marker;
+
+        }
+
+        return $arr;
+
+    }
+
+    Public Function BordersArrayFromDB(string $query) : array{
+
+        $arr = [];
+
+        foreach ($this->conn->query($query) as $row) {
+        
+            $marker = [
+                $row['gb'],
+                $row['bl'], 
+                $row['st']
             ];
 
         $arr[] = $marker;

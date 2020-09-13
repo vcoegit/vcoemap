@@ -20,6 +20,10 @@ class Entry{
     private $toc;
     private $configs;
 
+    //Betrifft die Verortung des Eintrags...
+    private $gemeinde; //gb
+    private $bundesland; //bl
+    private $staat; //st
 
     public function __construct(){
 
@@ -41,7 +45,7 @@ class Entry{
 
     private function set_linkDelete(){
 
-        if($this->configs['env'=='dev']){
+        if($this->configs['env']=='dev'){
             $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/leaflet2020/block.php?hsh=' . $this->get_hashedEmail() . '&entryid=' . $this->get_entryid();
         }else{
             $this->linkDelete = 'http://' . $_SERVER['SERVER_NAME'] . '/block.php?hsh=' . $this->get_hashedEmail() . '&entryid=' . $this->get_entryid();    
@@ -134,6 +138,30 @@ class Entry{
     
     public function get_uploadUrl(){
         return $this->uploadUrl;
+    }
+
+    public function set_gemeinde(String $gemeinde) : Entry{
+        $this->gemeinde = $gemeinde;
+    }
+
+    public function get_gemeinde(){
+        return $this->gemeinde;
+    }
+
+    public function set_bundesland(String $bundesland) : Entry{
+        $this->bundesland = $bundesland;
+    }
+
+    public function get_bundesland(){
+        return $this->bundesland;
+    }
+
+    public function set_staat(String $staat) : Entry{
+        $this->staat = $staat;
+    }
+
+    public function get_staat(){
+        return $this->staat;
     }
 
     //toc - Terms of conditions
