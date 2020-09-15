@@ -153,7 +153,7 @@ class Mailer{
                 
                 <p>Herzlichen Dank für Ihren Beitrag und herzliche Grüße!</p>
                 
-                <p>Christoh Hörhan<br>
+                <p>Christoph Hörhan<br>
                 Für das VCÖ-Team</p>
                 
                 <p>VCÖ - Mobilität mit Zukunft<br>
