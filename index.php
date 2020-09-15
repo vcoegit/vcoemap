@@ -515,17 +515,17 @@ include("./includes/header.php");
                                 <input type="hidden" name="centerLat" id="centerLat" class="form-control" value="">
                                 <input type="hidden" name="zoom" id="zoom" class="form-control" value="">
                             </div>
-
-                            <div class="form-group">
-                                <label for="gemeinde">Gemeinde</label>
-                                <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="" readonly>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="bundesland">Bundesland</label>
-                                <input type="text" name="bundesland" id="bundesland" class="form-control" value="" readonly>
-                            </div>
                             
+                            <div class="form-group">
+                                <label for="vorname">Vorname*</label>
+                                <input type="text" class="form-control" id="vorname" name="vorname" placeholder="dein Vorname" maxlength="50" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nachname">Nachname*</label>
+                                <input type="text" class="form-control" id="nachname" name="nachname" placeholder="dein Nachname" maxlength="50" required>
+                            </div>
+
                             <div class="form-group">
                                 <label for="email">Email*</label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" maxlength="50" required>
@@ -546,6 +546,16 @@ include("./includes/header.php");
                             <div class="form-group">
                                 <label for="plz">PLZ</label>
                                 <input type="text" class="form-control" id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ (Problemstelle)" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gemeinde">Gemeinde der Problemstelle</label>
+                                <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bundesland">Bundesland der Problemstelle</label>
+                                <input type="text" name="bundesland" id="bundesland" class="form-control" value="" readonly>
                             </div>
 
                             <div class="form-group">

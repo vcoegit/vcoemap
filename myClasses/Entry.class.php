@@ -6,6 +6,8 @@ include_once 'myClasses/Vcoeoci.class.php';
 class Entry{
 
     private $entryid;
+    private $vorname;
+    private $nachname;
     private $email;
     private $hashedEmail;
     private $title;
@@ -56,6 +58,24 @@ class Entry{
     public function get_linkDelete(){
         return $this->linkDelete;
     } 
+
+    public function set_vorname(string $vorname) : Entry {
+        $this->vorname = $vorname;
+        return $this;
+    }
+
+    public function get_vorname(){
+        return $this->vorname;
+    }
+
+    public function set_nachname(string $nachname) : Entry {
+        $this->nachname = $nachname;
+        return $this;
+    }
+
+    public function get_nachname(){
+        return $this->nachname;
+    }
 
     public function set_email(string $email) : Entry {
         $this->email = $email;
@@ -178,7 +198,7 @@ class Entry{
 
     public function save() : bool {
         $vcoe = New \myClasses\Vcoeoci;
-        $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email, plz, terms_of_use, gemeinde, bundesland) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "' , '"  . $this->get_plz() . "' , '" . $this->get_toc() . "' , '" . $this->get_gemeinde() . "', '" . $this->get_bundesland() . "')"; 
+        $query = "insert into entries (title, body, lon, lat, EPSG, email, filepath, notification_type, hashed_email, plz, terms_of_use, gemeinde, bundesland, vorname, nachname) values ('" . $this->get_title() . "', '" . $this->get_description() . "', '" .$this->get_lng() . "', '" . $this->get_lat() . "', 'EPSG:3857', '" . $this->get_email() . "', '" .$this->get_uploadurl() . "', '" . $this->get_type() . "', '"  . $this->get_hashedEmail() . "' , '"  . $this->get_plz() . "' , '" . $this->get_toc() . "' , '" . $this->get_gemeinde() . "', '" . $this->get_bundesland() . "', '" . $this->get_vorname() . "', '" . $this->get_nachname() . "')"; 
 
         if($vcoe->execute($query)>0){
             // $this->entryid = SELECT LAST_INSERT_ID();

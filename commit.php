@@ -64,6 +64,20 @@ if(key_exists('notificationtype', $_POST) && strlen($_POST['notificationtype'])>
     $objEntry->set_type();
 }
 
+if(key_exists('vorname', $_POST) && strlen($_POST['vorname'])>0){
+    $objEntry->set_vorname(addslashes(htmlentities($_POST['vorname'])));
+    
+}else{
+    $objEntry->set_vorname('');
+}
+
+if(key_exists('nachname', $_POST) && strlen($_POST['nachname'])>0){
+    $objEntry->set_nachname(addslashes(htmlentities($_POST['nachname'])));
+    
+}else{
+    $objEntry->set_nachname('');
+}
+
 if(key_exists('email', $_POST) && strlen($_POST['email'])>0){
     $objEntry->set_email(addslashes(htmlentities($_POST['email'])));
     
