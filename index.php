@@ -549,7 +549,7 @@ include("./includes/header.php");
                             </div>
 
                             <div class="form-group">
-                                <label for="gemeinde">Gemeinde der Problemstelle</label>
+                                <label for="gemeinde">Bezirk der Problemstelle</label>
                                 <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="" readonly>
                             </div>
 
