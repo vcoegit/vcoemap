@@ -26,43 +26,7 @@ require('myClasses/Vcoeoci.class.php');
 
 include("./includes/header.php");
 
-?>
 
-    <script>
-
-        function showStackBottomRight(message, type) {
-            if (typeof window.stackBottomRight === 'undefined') {
-                window.stackBottomRight = new PNotify.Stack({
-                dir1: 'up',
-                dir2: 'left',
-                firstpos1: 25,
-                firstpos2: 25
-                });
-            }
-            const opts = {
-                title: "Nachricht",
-                text: message,
-                stack: window.stackBottomRight
-            };
-
-            switch (type) {
-                case 'error':
-                opts.type = 'error';
-                break;
-                case 'info':
-                opts.type = 'info';
-                break;
-                case 'success':
-                opts.type = 'success';
-                break;
-            }
-            PNotify.alert(opts);
-        }
-
-    </script>
-
-    <?php 
-    
     // $message =  key_exists('notification', $_SESSION) ? $_SESSION['notification'] : 'Um einen Eintrag hinzuzufügen, klicken Sie doppelt an die betreffende Stelle in der Karte.'; 
 
     $noticode = 1; //default
@@ -142,9 +106,6 @@ include("./includes/header.php");
 ?>
 
 
-<!-- <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script> -->
-<script src="vendor/calvinmetcalf/catiline.js"></script>
-<script src="vendor/calvinmetcalf/leaflet.shpfile.js"></script>
 <script>
 
     var places = <?php echo json_encode( $arr ) ?>;
@@ -159,15 +120,6 @@ include("./includes/header.php");
 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
-
-    // var BasemapAT_basemap = L.tileLayer('https://maps{s}.wien.gv.at/basemap/geolandbasemap/{type}/google3857/{z}/{y}/{x}.{format}', {
-	// maxZoom: 20,
-	// attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
-	// subdomains: ["", "1", "2", "3", "4"],
-	// type: 'normal',
-	// format: 'png',
-	// bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
-    // });
 
     var BasemapAT_grau = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmapgrau/{type}/google3857/{z}/{y}/{x}.{format}', {
 	maxZoom: 19,
@@ -199,6 +151,23 @@ include("./includes/header.php");
     
 
     var mymap = L.map('mapid', {
+        contextmenu: true,
+        contextmenuWidth: 140,
+        contextmenuItems: [{
+            text: 'Show coordinates',
+            callback: showCoordinates
+        }, {
+            text: 'Center map here',
+            callback: centerMap
+        }, '-', {
+            text: 'Zoom in',
+            icon: 'images/zoom-in.png',
+            callback: zoomIn
+        }, {
+            text: 'Zoom out',
+            icon: 'images/zoom-out.png',
+            callback: zoomOut
+        }],
         center: [
                 <?= key_exists('centerLat', $_SESSION) ? $_SESSION['centerLat'] : 47.661688; ?>,
                 <?= key_exists('centerLng', $_SESSION) ? $_SESSION['centerLng'] : 13.090210; ?>
@@ -236,11 +205,6 @@ include("./includes/header.php");
            showLegend = true; 
         }
     }
-
-    // mymap.setLayoutProperty('country-label', 'text-field', [
-    //     'get',
-    //     'name_de'
-    // ]);
 
     //Loop through the markers array
     //Alle Punkte aus dem Places-Array der Map bzw. MarkerGroup und dann der Map hinzufügen...
@@ -343,31 +307,6 @@ include("./includes/header.php");
 
     mymap.addLayer(markers);
 
-    // var shpfile = new L.Shapefile('VGD-Oesterreich_gen_250.zip', {
-    //     onEachFeature: function(feature, layer) {
-    //         if (feature.properties) {
-    //             layer.bindPopup(Object.keys(feature.properties).map(function(k) {
-    //                 return k + ": " + feature.properties[k];
-    //             }).join("<br />"), {
-    //                 maxHeight: 200
-    //             });
-    //         }
-    //     },
-    //     style: function (feature) {
-    //             return {fillColor: '#1D1061'};
-    //     }
-    // });
-    // shpfile.addTo(mymap);
-    // shpfile.once("data:loaded", function() {
-    //     console.log("finished loaded shapefile");
-    // });
-
-    // mymap.addLayer(shpfile);
-
-    // shpfile.setZIndex(50);
-
-    //mymap.addLayer(markerGroup);
-
     var baseMaps = {
         "Grayscale": grayscale,
         "Streets": streets
@@ -389,8 +328,6 @@ include("./includes/header.php");
             text: "Wollen sie an dieser Stelle einen Karteneintrag machen?",
             type: 'question',
             showCancelButton: true,
-            // confirmButtonColor: '#3085d6',
-            // cancelButtonColor: '#d33',
             confirmButtonText: 'Ja!',
             cancelButtonText: 'Nein, abbrechen!'
         }).then((result) => {
@@ -399,7 +336,6 @@ include("./includes/header.php");
                 $.post( "hit.php", { lat: e.latlng.lat, lng: e.latlng.lng })
                     .done(function( data ) {
                             let arr_hit = data.split('|');
-                            // alert( "Data Loaded: " + jsondata.gemeinde);
                             gemeinde = arr_hit[0];
                             bundesland = arr_hit[1];
                             staat = arr_hit[2];
@@ -409,7 +345,6 @@ include("./includes/header.php");
                     })
                     .always(function() {
                             // was auf jeden Fall passieren soll...
-                            // alert( "finished" );
                             $('#exampleModal').modal('show');
 
                             //wichtig!!! - Die Keyboardeingaben müssen für Leaflet deaktiviert werden,
@@ -431,60 +366,26 @@ include("./includes/header.php");
             }
         })
 
-        // var button = $(event.relatedTarget) // Button that triggered the modal
-        // var recipient = button.data('whatever') // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        // var modal = $('#exampleModal')
-        // modal.find('.modal-title').text('New message to ' + 'bla')
-        // modal.find('.modal-body input').val('blabla')
-
     });
 
     //Das Standardverhalten bei Doppelklick (bzw. beim Handy: zweimal hintippen) will ich jetzt nicht...
     mymap.doubleClickZoom.disable();
 
-    // mymap.on('dblclick', function(e) {
+    function showCoordinates (e) {
+        alert(e.latlng);
+    }
 
-    //     Swal.fire({
-    //         // title: 'Eintrag an dieser Stelle?',
-    //         text: "Wollen sie an dieser Stelle einen Karteneintrag machen?",
-    //         type: 'question',
-    //         showCancelButton: true,
-    //         // confirmButtonColor: '#3085d6',
-    //         // cancelButtonColor: '#d33',
-    //         confirmButtonText: 'Ja!',
-    //         cancelButtonText: 'Nein, abbrechen!'
-    //     }).then((result) => {
-    //     if (result.value) {
-    //         setEntry(e.latlng)
-    //         }
-    //     })
-
-    // });
-
-    // function setEntry(latlng){
-
-    //     //Marker
-    //     //L.marker(latlng).addTo(mymap);
-
-    //     //Popup
-    //     var popup = L.popup()
-    //     .setLatLng(latlng)
-    //     .setContent(
-    //         '<div class="container" style="z-index:10000"><h4>was mir hier aufgefallen ist...</h4><form action="commit.php" method="post" enctype="multipart/form-data"><div class="form-group"><input type="hidden" name="csrf" value="<?= $_SESSION['csrf_token']; ?>"><input type="hidden" name="lat" value="' + latlng.lat + '"><input type="hidden" name="lng" value="' + latlng.lng + '"><input type="hidden" name="centerLng" value="' + mymap.getCenter().lng + '"><input type="hidden" name="centerLat" value="' + mymap.getCenter().lat + '"><input type="hidden" name="zoom" value="' + mymap.getZoom() + '"><input type="email" class="form-control" id="email" name="email" placeholder="deine@email.mail" required><br /> <div class="form-group"><label for="notificationtype">Kategorie</label><select class="form-control" id="notificationtype" name="notificationtype"><option>Gefahrenstelle Gehen</option><option>Gefahrenstelle Rad</option><option>zu hohes Tempo Kfz</option><option>Problemstelle Rad</option><option>Problemstelle Gehen</option><option>Sonstiges</option></select></div><input type="text" class="form-control" id="plz" name="plz" placeholder="PLZ"><br /><br /><textarea type="text" class="form-control" id="body" name="body" rows="3" placeholder="Beschreibung"></textarea><br /><br /><input type="hidden" name="MAX_FILE_SIZE" value="1024000"><input type="file" class="form-control-file" name="watchthispix" id="watchthispix" accept="image/*"><br /><br /><div class="buttons"><button type="submit" class="btn btn-primary btn-sm" id="submit">Eintrag bestätigen</button></div></div></form></div>'
-    //     )
-    //     .openOn(mymap);
-
-    // }
-
-    // function openNav() {
-    // document.getElementById("formPanel").style.width = "100%";
-    // }
-
-    // function closeNav() {
-    // document.getElementById("formPanel").style.width = "0%";
-    // }
+    function centerMap (e) {
+        mymap.panTo(e.latlng);
+    }
+    
+    function zoomIn (e) {
+        mymap.zoomIn();
+    }
+    
+    function zoomOut (e) {
+        mymap.zoomOut();
+    }
 
 </script>
 
