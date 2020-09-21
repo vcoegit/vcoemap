@@ -74,9 +74,10 @@ class Vcoeoci{
         foreach ($this->conn->query($query) as $row) {
         
             $marker = [
-                $row['gb'],
+                $row['bezirk'],
                 $row['bl'], 
-                $row['st']
+                $row['st'],
+                $row['gemeindename']
             ];
 
         $arr[] = $marker;

@@ -336,9 +336,10 @@ include("./includes/header.php");
                 $.post( "hit.php", { lat: e.latlng.lat, lng: e.latlng.lng })
                     .done(function( data ) {
                             let arr_hit = data.split('|');
-                            gemeinde = arr_hit[0];
+                            bezirk = arr_hit[0];
                             bundesland = arr_hit[1];
                             staat = arr_hit[2];
+                            gemeinde = arr_hit[3];
                     })
                     .fail(function() {
                             alert( "error" );
@@ -354,6 +355,7 @@ include("./includes/header.php");
                             $('#gemeinde').val(gemeinde);
                             $('#bundesland').val(bundesland);
                             $('#staat').val(staat);
+                            $('#bezirk').val(bezirk);
 
                             $('#centerLng').val(mymap.getCenter().lng);
                             $('#centerLat').val(mymap.getCenter().lat);
@@ -450,8 +452,13 @@ include("./includes/header.php");
                             </div>
 
                             <div class="form-group">
-                                <label for="gemeinde">Bezirk der Problemstelle</label>
+                                <label for="gemeinde">Gemeinde der Problemstelle</label>
                                 <input type="text" name="gemeinde" id="gemeinde" class="form-control" value="" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bezirk">Bezirk der Problemstelle</label>
+                                <input type="text" name="bezirk" id="bezirk" class="form-control" value="" readonly>
                             </div>
 
                             <div class="form-group">

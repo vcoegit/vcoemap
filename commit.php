@@ -41,6 +41,10 @@ if(key_exists('gemeinde', $_POST) && strlen($_POST['gemeinde'])>0){
     $objEntry->set_gemeinde(addslashes(htmlentities($_POST['gemeinde'])));
 }
 
+if(key_exists('bezirk', $_POST) && strlen($_POST['bezirk'])>0){
+    $objEntry->set_gemeinde(addslashes(htmlentities($_POST['bezirk'])));
+}
+
 
 if(key_exists('bundesland', $_POST) && strlen($_POST['bundesland'])>0){
     $objEntry->set_bundesland(addslashes(htmlentities($_POST['bundesland'])));    

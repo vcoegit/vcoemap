@@ -6,7 +6,8 @@ include_once 'myClasses/Vcoeoci.class.php';
 class Hit{
 
     //Betrifft die Verortung des Eintrags...
-    private $gemeinde; //gb
+    private $gemeinde; //gemeindename (Tabelle gemeinden!)
+    private $bezirk; //gb
     private $bundesland; //bl
     private $staat; //st
 
@@ -77,6 +78,14 @@ class Hit{
         return $this->gemeinde;
     }
 
+    // public function set_bezirk(String $bezirk) : Hit{
+    //     $this->bezirk = $bezirk;
+    // }
+
+    public function get_bezirk(){
+        return $this->bezirk;
+    }
+
     // public function set_bundesland(String $bundesland) : Hit{
     //     $this->bundesland = $bundesland;
     // }
@@ -98,11 +107,12 @@ class Hit{
         
         if(isset($this->lat) && isset($this->lng)){
             $vcoe = New \myClasses\Vcoeoci;
-            $strSQL = "select gb, bl, st from borders where ST_contains(shape, point(" . $this->lnglat . "))";
+            $strSQL = "select (case when borders.bkz = '900' then kgwien.gembzk_name1 else bezirk end) as bezirk, bl, st, gemeindename from borders left join gemeinden on borders.gkz = gemeinden.gkz left join bezirke on borders.bkz = bezirke.bkz left join kgwien on borders.kg_nr = kgwien.kgkz where ST_contains(shape, point(" . $this->lnglat . "))";
             $arr = $vcoe->BordersArrayFromDB($strSQL);
-            $this->gemeinde = $arr[0][0];
+            $this->bezirk = $arr[0][0];
             $this->bundesland = $arr[0][1];
             $this->staat = $arr[0][2];
+            $this->gemeinde = $arr[0][3];
         }
     }
 
