@@ -42,7 +42,7 @@ if(key_exists('gemeinde', $_POST) && strlen($_POST['gemeinde'])>0){
 }
 
 if(key_exists('bezirk', $_POST) && strlen($_POST['bezirk'])>0){
-    $objEntry->set_gemeinde(addslashes(htmlentities($_POST['bezirk'])));
+    $objEntry->set_bezirk(addslashes(htmlentities($_POST['bezirk'])));
 }
 
 

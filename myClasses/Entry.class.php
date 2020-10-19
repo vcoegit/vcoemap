@@ -23,7 +23,8 @@ class Entry{
     private $configs;
 
     //Betrifft die Verortung des Eintrags...
-    private $gemeinde; //gb
+    private $gemeinde; 
+    private $bezirk;
     private $bundesland; //bl
     private $staat; //st
 
@@ -167,6 +168,15 @@ class Entry{
 
     public function get_gemeinde(){
         return $this->gemeinde;
+    }
+
+    public function set_bezirk(String $bezirk) : Entry{
+        $this->bezirk = $bezirk;
+        return $this;
+    }
+
+    public function get_bezirk(){
+        return $this->bezirk;
     }
 
     public function set_bundesland(String $bundesland) : Entry{
