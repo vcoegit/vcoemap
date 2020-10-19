@@ -16,8 +16,11 @@ $data = array(
     'bezirk' => $objHit->get_bezirk(),
     'bundesland' => $objHit->get_bundesland(),
     'staat' => $objHit->get_staat(),
-    'gemeinde' => $objHit->get_gemeinde()
+    'gemeinde' => $objHit->get_gemeinde(),
+    'plz_suggs' => implode("#",$objHit->get_plzs())
 );
+
+//var_dump('nix!');
 
 // echo json_encode($data);
 

@@ -77,10 +77,23 @@ class Vcoeoci{
                 $row['bezirk'],
                 $row['bl'], 
                 $row['st'],
-                $row['gemeindename']
+                $row['gemeindename'],
+                $row['gkz']
             ];
 
         $arr[] = $marker;
+
+        }
+
+        return $arr;
+
+    }
+
+    Public Function PlzArrayFromDB($query) : array{
+
+        foreach ($this->conn->query($query) as $row) {
+
+        $arr[] = $row['plz'];
 
         }
 

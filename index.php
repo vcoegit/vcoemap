@@ -114,6 +114,7 @@ include("./includes/header.php");
     var gemeinde;
     var bundesland;
     var staat;
+    var plz_suggs; //Vorschäge für PLZ-Feld
 
 	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 	    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -340,6 +341,7 @@ include("./includes/header.php");
                             bundesland = arr_hit[1];
                             staat = arr_hit[2];
                             gemeinde = arr_hit[3];
+                            plz_suggs = arr_hit[4];
                     })
                     .fail(function() {
                             alert( "error" );
@@ -356,6 +358,18 @@ include("./includes/header.php");
                             $('#bundesland').val(bundesland);
                             $('#staat').val(staat);
                             $('#bezirk').val(bezirk);
+
+                            plz_suggs = plz_suggs.split("#");
+                            plz_suggs.forEach(feedSelectOptions);
+
+                            function feedSelectOptions(plz) {
+                                $('#plz').append('<option value="' + plz + '">' + plz + '</option>');
+                            }
+
+                            // Beispiel:
+                            // $.each(obj.cid, function(idx, o) {
+                            //     $("#ctid").append("<option value="+o.city_id+">"+o.city_name+"</option>");
+                            // });
 
                             $('#centerLng').val(mymap.getCenter().lng);
                             $('#centerLat').val(mymap.getCenter().lat);
@@ -448,7 +462,12 @@ include("./includes/header.php");
                             
                             <div class="form-group">
                                 <label for="plz">PLZ</label>
-                                <input type="text" class="form-control" id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ (Problemstelle)" required>
+                                <!-- <input type="text" class="form-control" id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ (Problemstelle)" required> -->
+                                <!-- <datalist class="form-control" id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ (Problemstelle)" required>
+                                </datalist> -->
+                                <input list="plz" value="" class="custom-select custom-select-md">
+                                <datalist id="plz" name="plz" pattern="[0-9]*" placeholder="PLZ (Problemstelle)" required>
+                                </datalist>
                             </div>
 
                             <div class="form-group">

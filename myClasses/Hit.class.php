@@ -7,6 +7,7 @@ class Hit{
 
     //Betrifft die Verortung des Eintrags...
     private $gemeinde; //gemeindename (Tabelle gemeinden!)
+    private $gkz;
     private $bezirk; //gb
     private $bundesland; //bl
     private $staat; //st
@@ -16,7 +17,11 @@ class Hit{
     private $latlng;
     private $lnglat;
 
+    private $plz_suggestions; //arr
+
     public function __construct(){
+
+        $plz_suggestion = [];
 
     }
 
@@ -50,6 +55,9 @@ class Hit{
         //Wann immer sich die Koordinaten ändern, müssen sie Ortsbezeichnungen ermittelt werden...
         $this->query_location_names();
 
+        //...sowie die vorzuschlagenden PLZ...
+        $this->query_plz_suggestions();
+
     }
 
     public function get_latlng(){
@@ -62,6 +70,9 @@ class Hit{
 
         //Wann immer sich die Koordinaten ändern, müssen sie Ortsbezeichnungen ermittelt werden...
         $this->query_location_names();
+
+        //...sowie die vorzuschlagenden PLZ...
+        $this->query_plz_suggestions();
 
     }
 
@@ -102,18 +113,41 @@ class Hit{
         return $this->staat;
     }
 
+    public function get_plzs(){
+        return $this->plz_suggestions;
+    }
+
     private function query_location_names(){
         //..also Gemeinde, Bundesland, Staat...
         
         if(isset($this->lat) && isset($this->lng)){
             $vcoe = New \myClasses\Vcoeoci;
-            $strSQL = "select (case when borders.bkz = '900' then kgwien.gembzk_name1 else bezirk end) as bezirk, bl, st, gemeindename from borders left join gemeinden on borders.gkz = gemeinden.gkz left join bezirke on borders.bkz = bezirke.bkz left join kgwien on borders.kg_nr = kgwien.kgkz where ST_contains(shape, point(" . $this->lnglat . "))";
+            // $strSQL = "select (case when borders.bkz = '900' then kgwien.gembzk_name1 else bezirk end) as bezirk, bl, st, gemeindename from borders left join gemeinden on borders.gkz = gemeinden.gkz left join bezirke on borders.bkz = bezirke.bkz left join kgwien on borders.kg_nr = kgwien.kgkz where ST_contains(shape, point(" . $this->lnglat . "))";
+
+            $strSQL = "select bezirke.bezirk, borders.bl, borders.st, kg.gemeindename, borders.gkz from borders left join katastralgemeinden kg on borders.kg_nr = kg.kg_nr left join bezirke on borders.bkz = bezirke.bkz where ST_contains(shape, point(" . $this->lnglat . "))";      
+
             $arr = $vcoe->BordersArrayFromDB($strSQL);
             $this->bezirk = $arr[0][0];
             $this->bundesland = $arr[0][1];
             $this->staat = $arr[0][2];
             $this->gemeinde = $arr[0][3];
+            $this->gkz = $arr[0][4];
         }
+    }
+
+    private function query_plz_suggestions(){
+        //...es werden alle in Frage kommenden Postleitzahlen ermittelt...
+
+        if(isset($this->lat) && isset($this->lng)){
+            $vcoe = New \myClasses\Vcoeoci;
+
+            $strSQL = "select distinct(plz) from plz where gemnr = '" . $this->gkz . "'";
+            $arr = $vcoe->PlzArrayFromDB($strSQL);
+
+            $this->plz_suggestions = $arr;
+            // var_dump('nix!');
+        }
+
     }
 
 }
