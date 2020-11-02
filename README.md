@@ -13,7 +13,11 @@ zusätzlich: um Koordinaten den jeweiligen Verwaltungseinheiten zuordnen zu kön
 
 https://www.bev.gv.at/portal/page?_pageid=713,2601271&_dad=portal&_schema=PORTAL
 
-Beides ist frei verfügbar.
+weiters gibt es noch eine Datenquelle zur Einbeziehung der Postleitzahlen:
+
+https://www.post.at/g/c/postlexikon (PLZ Bestimmungsort)
+
+Alles ist jeweils frei verfügbar.
 
 Noch was: Es gibt ein File: config_template.php... Das ist eine Vorlage für ein File das dann in einer funktionierenden Anwendung config.php heißen muss und mit den jeweilig zutreffenden Konfigurationseinstellungen (Mailaccountzugangsdaten, Datenbankzugangsdaten u.sw.) befüllt sein muss. Es gibt jeweils eine Konfiguration für eine Entwicklungsumgebung und eine für eine Produktionsumgebung. Welche von beiden verwendet werden soll wird ebenfalls im config.php-File eingestellt 'dev' bzw. 'prod'.
 -- MySQL dump 10.16 Distrib 10.1.30-MariaDB, for Win32 (AMD64)
